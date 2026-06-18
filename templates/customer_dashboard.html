@@ -5,30 +5,43 @@
 </head>
 <body>
 
-<h1>🚗 Customer Dashboard</h1>
+<h1>🚗 AutoRescue Customer Dashboard</h1>
 
-<h3>Your Current Location</h3>
+<form action="/request-mechanic" method="POST">
 
-<p id="location">Fetching location...</p>
+    <label>Vehicle Type</label><br>
+    <select name="vehicle_type">
+        <option>Bike</option>
+        <option>Car</option>
+        <option>Scooter</option>
+    </select>
 
-<input type="hidden" id="lat">
-<input type="hidden" id="lng">
+    <br><br>
+
+    <label>Issue</label><br>
+    <textarea name="issue_type"></textarea>
+
+    <br><br>
+
+    <input type="hidden" name="latitude" id="lat">
+    <input type="hidden" name="longitude" id="lng">
+
+    <button type="submit">
+        Request Mechanic
+    </button>
+
+</form>
 
 <script>
-
 navigator.geolocation.getCurrentPosition(function(position){
 
-    let lat = position.coords.latitude;
-    let lng = position.coords.longitude;
+    document.getElementById("lat").value =
+    position.coords.latitude;
 
-    document.getElementById("lat").value = lat;
-    document.getElementById("lng").value = lng;
-
-    document.getElementById("location").innerHTML =
-        "Latitude: " + lat + "<br>Longitude: " + lng;
+    document.getElementById("lng").value =
+    position.coords.longitude;
 
 });
-
 </script>
 
 </body>

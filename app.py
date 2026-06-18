@@ -2,6 +2,8 @@ from flask import Flask, render_template, request
 from config import Config
 from models.users import db, User
 from werkzeug.security import generate_password_hash, check_password_hash
+from models.request import ServiceRequest
+
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -54,21 +56,48 @@ def login():
         if user and check_password_hash(user.password, password):
 
             if user.role == "customer":
-            return render_template("customer_dashboard.html")
+                return render_template("customer_dashboard.html")
 
             elif user.role == "mechanic":
-                return "Mechanic Dashboard"
+                return render_template("mechanic_dashboard.html")
 
             elif user.role == "admin":
-                return "Admin Dashboard"
+                return render_template("admin_dashboard.html")
 
         return "Invalid Email or Password"
 
     return render_template("login.html")
 
+@app.route("/request-mechanic", methods=["POST"])
+def request_mechanic():
 
-if __name__ == "__main__":
-    with app.app_context():
-        db.create_all()
+    vehicle_type = request.form["vehicle_type"]
+    issue_type = request.form["issue_type"]
+    latitude = request.form["latitude"]
+    longitude = request.form["longitude"]
+
+    new_request = ServiceRequest(
+        customer_id=1,
+        vehicle_type=vehicle_type,
+        issue_type=issue_type,
+        latitude=latitude,
+        longitude=longitude,
+        status="Pending"
+    )
+
+    db.session.add(new_request)
+    db.session.commit()
+
+    return "Mechanic Request Sent Successfully 🚗"
+
+@app.route("/view-requests")
+def view_requests():
+
+    requests = ServiceRequest.query.all()
+
+    return render_template(
+        "view_requests.html",
+        requests=requests
+    )
 
     app.run(debug=True)
