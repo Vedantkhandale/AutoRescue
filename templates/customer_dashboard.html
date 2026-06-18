@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Customer Dashboard</title>
+</head>
+<body>
+
+<h1>🚗 Customer Dashboard</h1>
+
+<h3>Your Current Location</h3>
+
+<p id="location">Fetching location...</p>
+
+<input type="hidden" id="lat">
+<input type="hidden" id="lng">
+
+<script>
+
+navigator.geolocation.getCurrentPosition(function(position){
+
+    let lat = position.coords.latitude;
+    let lng = position.coords.longitude;
+
+    document.getElementById("lat").value = lat;
+    document.getElementById("lng").value = lng;
+
+    document.getElementById("location").innerHTML =
+        "Latitude: " + lat + "<br>Longitude: " + lng;
+
+});
+
+</script>
+
+</body>
+</html>
