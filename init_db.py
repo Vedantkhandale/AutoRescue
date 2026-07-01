@@ -2,6 +2,7 @@
 
 Run: python init_db.py
 """
+import os
 from app import app
 from models.users import db, User
 from models.request import ServiceRequest
@@ -64,5 +65,7 @@ def seed():
 
 
 if __name__ == '__main__':
+    # Determine the actual DB file in use for local SQLite
+    db_file = os.environ.get('DB_FILE', 'autorescue_v2.db')
     seed()
-    print('Database initialized and seeded: autorescue.db')
+    print(f'Database initialized and seeded: {db_file}')

@@ -4,10 +4,10 @@ import os
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY', 'autorescue123')
 
-    # Prefer DATABASE_URL env var (e.g. for production), otherwise use a local SQLite file
-    SQLALCHEMY_DATABASE_URI = os.environ.get(
-        'DATABASE_URL',
-        'sqlite:///autorescue.db'
-    )
+    # Priority: DATABASE_URL -> DB_FILE -> default 'autorescue_v2.db'
+    db_file = os.environ.get('DB_FILE', 'autorescue_v2.db')
+    default_sqlite = f"sqlite:///{db_file}"
+
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', default_sqlite)
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
