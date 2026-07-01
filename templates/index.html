@@ -1,16 +1,75 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>AutoRescue</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <title>AutoRescue</title>
+        <link rel="stylesheet" href="/static/css/style.css">
+        <script defer src="/static/js/app.js"></script>
+        <style> a{color:inherit;text-decoration:none} </style>
 </head>
 <body>
+    <div class="container">
+        <header class="site-header">
+            <div class="brand">
+                <div class="logo">AutoRescue</div>
+                <div class="tag muted">On-demand roadside help</div>
+            </div>
+            <nav>
+                <a class="btn secondary" href="/login">Login</a>
+                <a class="btn" href="/register">Register</a>
+            </nav>
+        </header>
 
-<h1>🚗 AutoRescue</h1>
+        <section class="hero">
+            <div class="hero-card">
+                <h1>Fast, reliable roadside help — wherever you are</h1>
+                <p class="muted">Request a mechanic in seconds. See nearby professionals and track requests in real time.</p>
+                <div class="quick-actions">
+                    <button class="btn" data-open-request>Request Mechanic</button>
+                    <a class="btn secondary" href="/view-requests">View Requests</a>
+                </div>
+            </div>
 
-<p>Find Nearby Mechanics Instantly</p>
+            <aside class="card-panel">
+                <h3>How it works</h3>
+                <ol class="muted">
+                    <li>Choose vehicle & describe issue</li>
+                    <li>Share your location</li>
+                    <li>Mechanic accepts and heads to you</li>
+                </ol>
+            </aside>
+        </section>
 
-<a href="/login">Login</a>
-<a href="/register">Register</a>
+    </div>
+
+    <div id="modal-backdrop" class="modal-backdrop">
+        <div class="modal">
+            <h3>Request a Mechanic</h3>
+            <p class="muted">Quick form — we'll use your device location.</p>
+            <form id="request-form" action="/request-mechanic" method="POST">
+                <div class="row" style="margin-top:10px">
+                    <select name="vehicle_type" class="select">
+                        <option>Bike</option>
+                        <option>Car</option>
+                        <option>Scooter</option>
+                    </select>
+                </div>
+                <div style="margin-top:8px">
+                    <textarea name="issue_type" placeholder="Describe the issue..." required></textarea>
+                </div>
+                <input type="hidden" name="latitude" id="lat">
+                <input type="hidden" name="longitude" id="lng">
+                <div style="display:flex;gap:8px;margin-top:12px;justify-content:flex-end">
+                    <button type="button" id="modal-close" class="btn secondary">Cancel</button>
+                    <button class="btn">Send Request</button>
+                </div>
+                <p id="request-msg" style="margin-top:10px"></p>
+            </form>
+        </div>
+    </div>
+
+    <div class="fab" data-open-request>+</div>
 
 </body>
 </html>

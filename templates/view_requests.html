@@ -2,91 +2,43 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Customer Requests</title>
-
-    <style>
-        body{
-            font-family: Arial, sans-serif;
-            background:#f5f5f5;
-            margin:0;
-            padding:20px;
-        }
-
-        h1{
-            text-align:center;
-            color:#333;
-        }
-
-        .card{
-            background:white;
-            padding:20px;
-            margin:15px auto;
-            width:80%;
-            border-radius:10px;
-            box-shadow:0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .status{
-            color:green;
-            font-weight:bold;
-        }
-
-        .empty{
-            text-align:center;
-            color:red;
-            font-size:18px;
-        }
-    </style>
-
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>.card{padding:14px;border-radius:10px}</style>
 </head>
 <body>
 
-    <h1>🚗 Customer Requests</h1>
+    <div class="container">
+        <header class="site-header">
+            <div class="brand"><div class="logo">AutoRescue</div><div class="tag muted">Requests</div></div>
+            <nav><a class="btn secondary" href="/">Home</a></nav>
+        </header>
 
-    {% if requests %}
+        <h1>🚗 Customer Requests</h1>
 
-        {% for request in requests %}
+        {% if requests %}
 
-        <div class="card">
-
-            <p>
-                <strong>Vehicle Type:</strong>
-                {{ request.vehicle_type }}
-            </p>
-
-            <p>
-                <strong>Issue:</strong>
-                {{ request.issue_type }}
-            </p>
-
-            <p>
-                <strong>Latitude:</strong>
-                {{ request.latitude }}
-            </p>
-
-            <p>
-                <strong>Longitude:</strong>
-                {{ request.longitude }}
-            </p>
-
-            <p>
-                <strong>Status:</strong>
-                <span class="status">
-                    {{ request.status }}
-                </span>
-            </p>
-
+        <div class="requests-grid">
+            {% for request in requests %}
+                <div class="req-card card">
+                    <p><strong>Vehicle:</strong> {{ request.vehicle_type }}</p>
+                    <p><strong>Issue:</strong> {{ request.issue_type }}</p>
+                    <p class="muted"><strong>Location:</strong> {{ request.latitude }}, {{ request.longitude }}</p>
+                    <p><strong>Status:</strong>
+                        <span class="status-pill {% if request.status == 'Pending' %}status-pending{% else %}status-done{% endif %}">{{ request.status }}</span>
+                    </p>
+                </div>
+            {% endfor %}
         </div>
 
-        {% endfor %}
+        {% else %}
 
-    {% else %}
+            <p class="muted">No Customer Requests Found</p>
 
-        <p class="empty">
-            No Customer Requests Found
-        </p>
+        {% endif %}
 
-    {% endif %}
+    </div>
 
 </body>
 </html>

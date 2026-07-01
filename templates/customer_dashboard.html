@@ -1,48 +1,58 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Customer Dashboard</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script defer src="/static/js/app.js"></script>
 </head>
 <body>
 
-<h1>🚗 AutoRescue Customer Dashboard</h1>
+    <div class="container">
+        <header class="site-header">
+            <div class="brand"><div class="logo">AutoRescue</div><div class="tag muted">Customer</div></div>
+            <nav><a class="btn secondary" href="/view-requests">View Requests</a></nav>
+        </header>
 
-<form action="/request-mechanic" method="POST">
+        <div class="hero">
+            <div class="hero-card">
+                <h1>Request a mechanic to your location</h1>
+                <p class="muted">We automatically capture your location. Fill the details and tap send.</p>
 
-    <label>Vehicle Type</label><br>
-    <select name="vehicle_type">
-        <option>Bike</option>
-        <option>Car</option>
-        <option>Scooter</option>
-    </select>
+                <div class="card-panel" style="margin-top:12px">
+                    <form id="request-form" action="/request-mechanic" method="POST" class="request-form">
+                        <label class="muted">Vehicle Type</label>
+                        <select name="vehicle_type" class="select">
+                            <option>Bike</option>
+                            <option>Car</option>
+                            <option>Scooter</option>
+                        </select>
 
-    <br><br>
+                        <label class="muted">Issue</label>
+                        <textarea name="issue_type" placeholder="e.g., flat tyre, engine stall" required></textarea>
 
-    <label>Issue</label><br>
-    <textarea name="issue_type"></textarea>
+                        <input type="hidden" name="latitude" id="lat">
+                        <input type="hidden" name="longitude" id="lng">
 
-    <br><br>
+                        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px">
+                            <button type="submit" class="btn">Request Mechanic</button>
+                        </div>
+                        <p id="request-msg" style="margin-top:8px"></p>
+                    </form>
+                </div>
+            </div>
 
-    <input type="hidden" name="latitude" id="lat">
-    <input type="hidden" name="longitude" id="lng">
-
-    <button type="submit">
-        Request Mechanic
-    </button>
-
-</form>
-
-<script>
-navigator.geolocation.getCurrentPosition(function(position){
-
-    document.getElementById("lat").value =
-    position.coords.latitude;
-
-    document.getElementById("lng").value =
-    position.coords.longitude;
-
-});
-</script>
+            <aside class="card-panel">
+                <h3>Tips</h3>
+                <ul class="muted">
+                    <li>Stay visible and safe while waiting</li>
+                    <li>Share clear issue details</li>
+                    <li>Keep your phone available</li>
+                </ul>
+            </aside>
+        </div>
+    </div>
 
 </body>
 </html>
