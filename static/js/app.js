@@ -41,4 +41,50 @@ document.addEventListener('DOMContentLoaded',function(){
     })
   }
 
+  // Accept request handler (for mechanics)
+  document.querySelectorAll('[data-accept-request]').forEach(btn=>{
+    btn.addEventListener('click', async function(){
+      const id = this.dataset.requestId
+      if(!id) return
+      this.disabled = true
+      const res = await fetch('/accept-request', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({id})
+      })
+      if(res.ok){
+        this.innerText = 'Accepted'
+        this.classList.remove('btn')
+        this.classList.add('status-pill','status-done')
+        showToast('Request accepted')
+      } else {
+        this.disabled = false
+        showToast('Failed to accept', true)
+      }
+    })
+  })
+
+  // simple toast
+  const showToast = (text, error=false) => {
+    let t = document.getElementById('ar-toast')
+    if(!t){
+      t = document.createElement('div')
+      t.id = 'ar-toast'
+      t.style.position = 'fixed'
+      t.style.right = '20px'
+      t.style.bottom = '100px'
+      t.style.padding = '10px 14px'
+      t.style.borderRadius = '10px'
+      t.style.boxShadow = '0 10px 30px rgba(2,6,23,0.6)'
+      t.style.zIndex = 9999
+      t.style.color = '#071021'
+      t.style.fontWeight = 700
+      document.body.appendChild(t)
+    }
+    t.innerText = text
+    t.style.background = error? '#ff8a8a' : 'linear-gradient(45deg,#8ff0b8,#6bd6c8)'
+    t.style.opacity = '1'
+    setTimeout(()=>{ t.style.transition = 'opacity 400ms'; t.style.opacity = '0' }, 2000)
+  }
+
 })

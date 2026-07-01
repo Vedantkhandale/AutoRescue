@@ -25,8 +25,18 @@
                     <p><strong>Vehicle:</strong> {{ request.vehicle_type }}</p>
                     <p><strong>Issue:</strong> {{ request.issue_type }}</p>
                     <p class="muted"><strong>Location:</strong> {{ request.latitude }}, {{ request.longitude }}</p>
-                    <p><strong>Status:</strong>
-                        <span class="status-pill {% if request.status == 'Pending' %}status-pending{% else %}status-done{% endif %}">{{ request.status }}</span>
+                    <p style="display:flex;align-items:center;gap:8px;justify-content:space-between">
+                        <span>
+                            <strong>Status:</strong>
+                            <span class="status-pill {% if request.status == 'Pending' %}status-pending{% else %}status-done{% endif %}">{{ request.status }}</span>
+                        </span>
+                        <span>
+                            {% if request.status == 'Pending' %}
+                                <button data-accept-request data-request-id="{{ request.id }}" class="btn">Accept</button>
+                            {% else %}
+                                <span class="status-pill status-done">{{ request.status }}</span>
+                            {% endif %}
+                        </span>
                     </p>
                 </div>
             {% endfor %}

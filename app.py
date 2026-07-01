@@ -103,3 +103,19 @@ def view_requests():
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+
+@app.route('/accept-request', methods=['POST'])
+def accept_request():
+    req_id = request.form.get('id') or request.json.get('id')
+    if not req_id:
+        return ("Missing id", 400)
+
+    sr = ServiceRequest.query.get(req_id)
+    if not sr:
+        return ("Not found", 404)
+
+    sr.status = 'Accepted'
+    db.session.commit()
+
+    return ("Accepted", 200)

@@ -27,6 +27,23 @@ html,body{height:100%;margin:0;font-family:Inter,system-ui,Arial,sans-serif;back
 .btn{background:var(--accent);color:#fff;padding:10px 16px;border-radius:10px;border:none;cursor:pointer;font-weight:600}
 .btn.secondary{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
 
+/* Animations */
+.btn{transition:transform .12s ease, box-shadow .12s ease}
+.btn:active{transform:translateY(1px) scale(.995)}
+.fab{transition:transform .18s cubic-bezier(.2,.9,.3,1), box-shadow .18s}
+.fab:active{transform:scale(.96)}
+
+/* Toast */
+#ar-toast{transition:opacity .4s ease}
+
+.status-pill{display:inline-block;padding:6px 10px;border-radius:999px;font-weight:700;font-size:13px}
+.status-pending{background:#2b2f3b;color:#ffd27a}
+.status-done{background:linear-gradient(90deg,#8ff0b8,#6bd6c8);color:#062018}
+
+/* Subtle card hover */
+.req-card:hover{transform:translateY(-6px);transition:transform .18s ease,box-shadow .18s;box-shadow:0 18px 40px rgba(2,6,23,0.6)}
+
+
 .card-panel{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:18px;border-radius:12px}
 
 /* Customer form */
