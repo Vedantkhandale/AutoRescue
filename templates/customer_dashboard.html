@@ -1,58 +1,114 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Customer Dashboard</title>
-    <link rel="stylesheet" href="/static/css/style.css">
-    <script defer src="/static/js/app.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Dashboard - AutoRescue</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        .sidebar { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .status-badge { padding: 5px 10px; border-radius: 20px; font-size: 0.85rem; }
+        .status-pending { background: #fff3cd; color: #856404; }
+        .status-accepted { background: #d1ecf1; color: #0c5460; }
+        .status-completed { background: #d4edda; color: #155724; }
+    </style>
 </head>
 <body>
-
-    <div class="container">
-        <header class="site-header">
-            <div class="brand"><div class="logo">AutoRescue</div><div class="tag muted">Customer</div></div>
-            <nav><a class="btn secondary" href="/view-requests">View Requests</a></nav>
-        </header>
-
-        <div class="hero">
-            <div class="hero-card">
-                <h1>Request a mechanic to your location</h1>
-                <p class="muted">We automatically capture your location. Fill the details and tap send.</p>
-
-                <div class="card-panel" style="margin-top:12px">
-                    <form id="request-form" action="/request-mechanic" method="POST" class="request-form">
-                        <label class="muted">Vehicle Type</label>
-                        <select name="vehicle_type" class="select">
-                            <option>Bike</option>
-                            <option>Car</option>
-                            <option>Scooter</option>
-                        </select>
-
-                        <label class="muted">Issue</label>
-                        <textarea name="issue_type" placeholder="e.g., flat tyre, engine stall" required></textarea>
-
-                        <input type="hidden" name="latitude" id="lat">
-                        <input type="hidden" name="longitude" id="lng">
-
-                        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px">
-                            <button type="submit" class="btn">Request Mechanic</button>
-                        </div>
-                        <p id="request-msg" style="margin-top:8px"></p>
-                    </form>
-                </div>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 sidebar text-white p-4">
+                <h4 class="mb-4 fw-bold"><i class="bi bi-person-circle"></i> {{ user.name }}</h4>
+                <hr>
+                <nav class="nav flex-column">
+                    <a class="nav-link text-white active" href="/customer-dashboard">
+                        <i class="bi bi-house"></i> Dashboard
+                    </a>
+                    <a class="nav-link text-white" href="/request-service">
+                        <i class="bi bi-plus-circle"></i> Request Mechanic
+                    </a>
+                    <a class="nav-link text-white" href="/view-requests">
+                        <i class="bi bi-list-check"></i> My Requests
+                    </a>
+                    <a class="nav-link text-white" href="/profile">
+                        <i class="bi bi-gear"></i> Profile Settings
+                    </a>
+                    <hr class="bg-white">
+                    <a class="nav-link text-white" href="/logout">
+                        <i class="bi bi-box-arrow-left"></i> Logout
+                    </a>
+                </nav>
             </div>
 
-            <aside class="card-panel">
-                <h3>Tips</h3>
-                <ul class="muted">
-                    <li>Stay visible and safe while waiting</li>
-                    <li>Share clear issue details</li>
-                    <li>Keep your phone available</li>
-                </ul>
-            </aside>
+            <!-- Main Content -->
+            <div class="col-md-9 p-4">
+                <h2 class="mb-4 fw-bold"><i class="bi bi-speedometer2"></i> Dashboard</h2>
+
+                <!-- Quick Stats -->
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <div class="card card-hover shadow-sm">
+                            <div class="card-body text-center">
+                                <h5 class="text-muted">Total Requests</h5>
+                                <h2 class="text-primary">0</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card card-hover shadow-sm">
+                            <div class="card-body text-center">
+                                <h5 class="text-muted">Pending</h5>
+                                <h2 class="text-warning">0</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card card-hover shadow-sm">
+                            <div class="card-body text-center">
+                                <h5 class="text-muted">Completed</h5>
+                                <h2 class="text-success">0</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card card-hover shadow-sm">
+                            <div class="card-body text-center">
+                                <h5 class="text-muted">Rating</h5>
+                                <h2 class="text-danger"><i class="bi bi-star-fill"></i> 0/5</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Action -->
+                <div class="card shadow mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold"><i class="bi bi-lightning"></i> Need Emergency Help?</h5>
+                        <p class="card-text">Request a mechanic near you in just 3 clicks</p>
+                        <a href="/request-service" class="btn btn-primary btn-lg">
+                            <i class="bi bi-plus-circle"></i> Request Mechanic Now
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Recent Requests -->
+                <div class="card shadow">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0 fw-bold"><i class="bi bi-list-check"></i> Recent Requests</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="alert alert-info" role="alert">
+                            <i class="bi bi-info-circle"></i> No requests yet. <a href="/request-service">Create one now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

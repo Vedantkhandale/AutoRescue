@@ -2,53 +2,101 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Customer Requests</title>
-    <link rel="stylesheet" href="/static/css/style.css">
-    <style>.card{padding:14px;border-radius:10px}</style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Requests - AutoRescue</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        .status-pending { background: #fff3cd; color: #856404; }
+        .status-accepted { background: #d1ecf1; color: #0c5460; }
+        .status-completed { background: #d4edda; color: #155724; }
+        .request-card { transition: all 0.3s ease; }
+        .request-card:hover { box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
+    </style>
 </head>
 <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="/"><i class="bi bi-car-front-fill"></i> AutoRescue</a>
+            <a href="/logout" class="btn btn-outline-light">Logout</a>
+        </div>
+    </nav>
 
-    <div class="container">
-        <header class="site-header">
-            <div class="brand"><div class="logo">AutoRescue</div><div class="tag muted">Requests</div></div>
-            <nav><a class="btn secondary" href="/">Home</a></nav>
-        </header>
-
-        <h1>🚗 Customer Requests</h1>
+    <div class="container py-5">
+        <h2 class="mb-4 fw-bold"><i class="bi bi-list-check"></i> Service Requests</h2>
 
         {% if requests %}
-
-        <div class="requests-grid">
+        <div class="row">
             {% for request in requests %}
-                <div class="req-card card">
-                    <p><strong>Vehicle:</strong> {{ request.vehicle_type }}</p>
-                    <p><strong>Issue:</strong> {{ request.issue_type }}</p>
-                    <p class="muted"><strong>Location:</strong> {{ request.latitude }}, {{ request.longitude }}</p>
-                    <p style="display:flex;align-items:center;gap:8px;justify-content:space-between">
-                        <span>
-                            <strong>Status:</strong>
-                            <span class="status-pill {% if request.status == 'Pending' %}status-pending{% else %}status-done{% endif %}">{{ request.status }}</span>
-                        </span>
-                        <span>
-                            {% if request.status == 'Pending' %}
-                                <button data-accept-request data-request-id="{{ request.id }}" class="btn">Accept</button>
-                            {% else %}
-                                <span class="status-pill status-done">{{ request.status }}</span>
-                            {% endif %}
-                        </span>
-                    </p>
+            <div class="col-md-6 mb-4">
+                <div class="card request-card shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <h5 class="card-title fw-bold">Request #{{ request.id }}</h5>
+                            <span class="badge status-{{ request.status|lower }}">{{ request.status }}</span>
+                        </div>
+                        
+                        <hr>
+
+                        <p class="mb-2">
+                            <strong><i class="bi bi-car-front"></i> Vehicle:</strong> {{ request.vehicle_type }}
+                        </p>
+                        <p class="mb-2">
+                            <strong><i class="bi bi-tools"></i> Issue:</strong> {{ request.issue_type }}
+                        </p>
+                        <p class="mb-2">
+                            <strong><i class="bi bi-geo-alt"></i> Location:</strong><br>
+                            Lat: {{ request.latitude }}, Lng: {{ request.longitude }}
+                        </p>
+                        <p class="mb-2 text-muted">
+                            <small><i class="bi bi-calendar"></i> {{ request.created_at.strftime('%d %b %Y, %H:%M') if request.created_at else 'N/A' }}</small>
+                        </p>
+
+                        {% if request.status == 'Pending' %}
+                        <button class="btn btn-success btn-sm w-100" onclick="acceptRequest({{ request.id }})">
+                            <i class="bi bi-check-circle"></i> Accept Request
+                        </button>
+                        {% else %}
+                        <button class="btn btn-secondary btn-sm w-100" disabled>
+                            <i class="bi bi-lock"></i> Already {{ request.status }}
+                        </button>
+                        {% endif %}
+                    </div>
                 </div>
+            </div>
             {% endfor %}
         </div>
-
         {% else %}
-
-            <p class="muted">No Customer Requests Found</p>
-
+        <div class="alert alert-info" role="alert">
+            <i class="bi bi-info-circle"></i> No service requests available at the moment.
+        </div>
         {% endif %}
-
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        async function acceptRequest(requestId) {
+            if (confirm('Are you sure you want to accept this request?')) {
+                try {
+                    const response = await fetch('/accept-request', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ id: requestId })
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        alert(data.message);
+                        location.reload();
+                    } else {
+                        alert('Error: ' + data.error);
+                    }
+                } catch (error) {
+                    alert('Failed to accept request: ' + error.message);
+                }
+            }
+        }
+    </script>
 </body>
 </html>
