@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 from config import Config
 from models.users import db, User
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -28,17 +28,17 @@ def register():
 
             # Validation
             if not all([name, email, mobile, password]):
-                return "All fields are required", 400
+                return jsonify({"error": "All fields are required"}), 400
 
             if len(mobile) < 10 or not mobile.isdigit():
-                return "Invalid mobile number", 400
+                return jsonify({"error": "Invalid mobile number"}), 400
 
             if len(password) < 6:
-                return "Password must be at least 6 characters", 400
+                return jsonify({"error": "Password must be at least 6 characters"}), 400
 
             # Check if user already exists
             if User.query.filter_by(email=email).first():
-                return "Email already registered", 400
+                return jsonify({"error": "Email already registered"}), 400
 
             new_user = User(
                 name=name,
@@ -51,10 +51,10 @@ def register():
             db.session.add(new_user)
             db.session.commit()
 
-            return "Registration Successful ✅", 201
+            return jsonify({"success": True, "message": "Registration Successful ✅"}), 201
         except Exception as e:
             db.session.rollback()
-            return f"Registration error: {str(e)}", 500
+            return jsonify({"error": f"Registration error: {str(e)}"}), 500
 
     return render_template("register.html")
 
@@ -67,7 +67,7 @@ def login():
             password = request.form.get("password", "")
 
             if not email or not password:
-                return "Email and password are required", 400
+                return jsonify({"error": "Email and password are required"}), 400
 
             user = User.query.filter_by(email=email).first()
 
@@ -79,11 +79,12 @@ def login():
                 elif user.role == "admin":
                     return render_template("admin_dashboard.html", user=user)
 
-            return "Invalid Email or Password", 401
+            return jsonify({"error": "Invalid Email or Password"}), 401
         except Exception as e:
-            return f"Login error: {str(e)}", 500
+            return jsonify({"error": f"Login error: {str(e)}"}), 500
 
     return render_template("login.html")
+
 
 @app.route("/request-mechanic", methods=["POST"])
 def request_mechanic():
@@ -95,13 +96,13 @@ def request_mechanic():
         customer_id = request.form.get("customer_id", 1)
 
         if not all([vehicle_type, issue_type, latitude, longitude]):
-            return "All fields are required", 400
+            return jsonify({"error": "All fields are required"}), 400
 
         try:
             lat = float(latitude)
             lon = float(longitude)
         except ValueError:
-            return "Invalid latitude/longitude", 400
+            return jsonify({"error": "Invalid latitude/longitude"}), 400
 
         new_request = ServiceRequest(
             customer_id=int(customer_id),
@@ -115,10 +116,11 @@ def request_mechanic():
         db.session.add(new_request)
         db.session.commit()
 
-        return {"success": True, "message": "Mechanic request sent successfully 🚗", "request_id": new_request.id}, 201
+        return jsonify({"success": True, "message": "Mechanic request sent successfully 🚗", "request_id": new_request.id}), 201
     except Exception as e:
         db.session.rollback()
-        return {"success": False, "error": str(e)}, 500
+        return jsonify({"error": str(e)}), 500
+
 
 @app.route("/view-requests")
 def view_requests():
@@ -129,26 +131,40 @@ def view_requests():
             requests=requests
         )
     except Exception as e:
-        return f"Error loading requests: {str(e)}", 500
+        return jsonify({"error": f"Error loading requests: {str(e)}"}), 500
+
+
+@app.route('/accept-request', methods=['POST'])
+def accept_request():
+    try:
+        req_id = request.form.get('id') or (request.json.get('id') if request.json else None)
+        if not req_id:
+            return jsonify({"error": "Missing request ID"}), 400
+
+        sr = ServiceRequest.query.get(int(req_id))
+        if not sr:
+            return jsonify({"error": "Request not found"}), 404
+
+        sr.status = 'Accepted'
+        db.session.commit()
+        return jsonify({"success": True, "message": "Request accepted successfully"}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": str(e)}), 500
+
+
+@app.errorhandler(404)
+def not_found(error):
+    return jsonify({"error": "Resource not found"}), 404
+
+
+@app.errorhandler(500)
+def internal_error(error):
+    db.session.rollback()
+    return jsonify({"error": "Internal server error"}), 500
 
 
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
     app.run(debug=True, host='127.0.0.1', port=5000)
-
-
-@app.route('/accept-request', methods=['POST'])
-def accept_request():
-    req_id = request.form.get('id') or request.json.get('id')
-    if not req_id:
-        return ("Missing id", 400)
-
-    sr = ServiceRequest.query.get(req_id)
-    if not sr:
-        return ("Not found", 404)
-
-    sr.status = 'Accepted'
-    db.session.commit()
-
-    return ("Accepted", 200)
