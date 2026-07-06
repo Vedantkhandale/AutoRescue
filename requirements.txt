@@ -1,5 +1,5 @@
-Flask
-Flask-SQLAlchemy
-SQLAlchemy
-Werkzeug
-pymysql
+Flask==2.3.0
+Flask-SQLAlchemy==3.0.5
+SQLAlchemy==2.0.19
+Werkzeug==2.3.0
+pymysql==1.1.0
