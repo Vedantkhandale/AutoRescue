@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}{{ status_code }} | AutoRescue{% endblock %}
+
+{% block content %}
+<section class="section-space">
+    <div class="container">
+        <div class="error-card text-center">
+            <span class="eyebrow">AutoRescue Control Room</span>
+            <h1>{{ status_code }}</h1>
+            <p>{{ message }}</p>
+            <div class="d-flex flex-column flex-sm-row justify-content-center gap-3 mt-4">
+                <a href="{{ url_for('home') }}" class="btn btn-premium">Back to Home</a>
+                {% if session.get('user_id') %}
+                <a href="{{ url_for('view_requests') }}" class="btn btn-soft">Open Requests</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

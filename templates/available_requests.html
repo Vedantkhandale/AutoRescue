@@ -1,260 +1,67 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Available Requests - AutoRescue</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    <style>
-        .request-card { border-left: 4px solid #667eea; transition: all 0.3s ease; }
-        .request-card:hover { box-shadow: 0 10px 30px rgba(0,0,0,0.15); transform: translateY(-5px); }
-        .urgency-high { border-left-color: #ef4444; }
-        .urgency-medium { border-left-color: #f59e0b; }
-        .urgency-low { border-left-color: #10b981; }
-    </style>
-</head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
-        <div class="container-fluid">
-            <a class="navbar-brand fw-bold" href="/"><i class="bi bi-car-front-fill"></i> AutoRescue</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="/mechanic-dashboard"><i class="bi bi-house"></i> Dashboard</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="/available-requests"><i class="bi bi-bell"></i> Requests</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/logout"><i class="bi bi-box-arrow-left"></i> Logout</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+{% extends "base.html" %}
 
-    <div class="container py-5">
-        <div class="row mb-4">
-            <div class="col-md-8">
-                <h2 class="fw-bold"><i class="bi bi-bell"></i> Available Service Requests</h2>
-                <p class="text-muted">Find and accept nearby service requests</p>
+{% block title %}Available Requests | AutoRescue{% endblock %}
+
+{% block content %}
+<section class="section-space">
+    <div class="container">
+        <div class="page-heading">
+            <div>
+                <span class="eyebrow">Live queue</span>
+                <h1>Available roadside rescue requests</h1>
+                <p>{% if mechanic %}Distance hints are calculated from {{ mechanic.shop_name }} when possible.{% else %}Pick requests from the live network queue.{% endif %}</p>
             </div>
-            <div class="col-md-4">
-                <button class="btn btn-primary w-100" onclick="location.reload()">
-                    <i class="bi bi-arrow-clockwise"></i> Refresh
-                </button>
-            </div>
+            <a href="{{ url_for('mechanic_dashboard') }}" class="btn btn-soft">Back to Dashboard</a>
         </div>
 
-        <div id="requestsContainer">
-            <!-- Requests will be loaded here -->
+        {% if requests %}
+        <div class="request-grid">
+            {% for request in requests %}
+            <article class="job-card priority-{{ request.priority }}">
+                <div class="job-card-top">
+                    <div>
+                        <div class="request-title">#{{ request.id }} &middot; {{ request.vehicle_type }}</div>
+                        <p>{{ request.issue_type }}</p>
+                    </div>
+                    <span class="priority-pill priority-{{ request.priority }}">{{ request.priority|title }}</span>
+                </div>
+                <div class="job-meta">
+                    <span><i class="bi bi-geo-alt"></i> {{ request.distance_label }}</span>
+                    <span><i class="bi bi-clock"></i> {{ request.created_label }}</span>
+                    <span><i class="bi bi-person"></i> {{ request.customer_name or 'Customer' }}</span>
+                    {% if request.customer_mobile %}
+                    <span><i class="bi bi-telephone"></i> {{ request.customer_mobile }}</span>
+                    {% endif %}
+                </div>
+                <button class="btn btn-premium w-100 mt-3" data-accept-request data-request-id="{{ request.id }}">Accept Request</button>
+            </article>
+            {% endfor %}
         </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="bi bi-check2-circle"></i>
+            <h3>All caught up</h3>
+            <p>There are no pending service requests in the queue.</p>
+        </div>
+        {% endif %}
     </div>
+</section>
+{% endblock %}
 
-    <!-- Request Modal -->
-    <div class="modal fade" id="requestModal" tabindex="-1">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title"><i class="bi bi-info-circle"></i> Request Details</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body" id="modalBody">
-                    <!-- Details will be loaded here -->
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-success" id="acceptBtn" onclick="acceptRequest()">
-                        <i class="bi bi-check-circle"></i> Accept Request
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        let selectedRequestId = null;
-
-        // Load requests on page load
-        window.addEventListener('load', loadRequests);
-
-        async function loadRequests() {
+{% block extra_scripts %}
+<script>
+    document.querySelectorAll('[data-accept-request]').forEach((button) => {
+        button.addEventListener('click', async () => {
+            button.disabled = true;
             try {
-                const response = await fetch('/view-requests');
-                const html = await response.text();
-                
-                // Parse the response to get requests data
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(html, 'text/html');
-                
-                // For now, show a sample request
-                showSampleRequests();
+                const result = await AutoRescue.postJson('/accept-request', { id: button.dataset.requestId });
+                AutoRescue.toast(result.message);
+                window.setTimeout(() => window.location.reload(), 700);
             } catch (error) {
-                console.error('Error loading requests:', error);
+                button.disabled = false;
+                AutoRescue.toast(error.message, 'danger');
             }
-        }
-
-        function showSampleRequests() {
-            const container = document.getElementById('requestsContainer');
-            const requests = [
-                {
-                    id: 1,
-                    vehicle: 'Bike',
-                    issue: 'Engine not starting, making strange noise',
-                    location: '28.6200, 77.2150',
-                    distance: '0.5 km away',
-                    time: '5 mins ago',
-                    urgency: 'high'
-                },
-                {
-                    id: 2,
-                    vehicle: 'Car',
-                    issue: 'Flat tire, need immediate replacement',
-                    location: '28.6180, 77.2100',
-                    distance: '1.2 km away',
-                    time: '15 mins ago',
-                    urgency: 'high'
-                },
-                {
-                    id: 3,
-                    vehicle: 'Auto',
-                    issue: 'Brake fluid leak',
-                    location: '28.6250, 77.2200',
-                    distance: '2.0 km away',
-                    time: '1 hour ago',
-                    urgency: 'medium'
-                }
-            ];
-
-            let html = '<div class="row">';
-            requests.forEach(req => {
-                html += `
-                    <div class="col-md-6 mb-4">
-                        <div class="card request-card urgency-${req.urgency}">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-start mb-2">
-                                    <h5 class="card-title fw-bold">#${req.id} - ${req.vehicle}</h5>
-                                    <span class="badge bg-${req.urgency === 'high' ? 'danger' : 'warning'}">
-                                        ${req.urgency.toUpperCase()}
-                                    </span>
-                                </div>
-                                <p class="card-text text-muted">${req.issue}</p>
-                                <hr>
-                                <p class="mb-2"><i class="bi bi-geo-alt"></i> <strong>${req.distance}</strong></p>
-                                <p class="mb-3 text-muted"><small><i class="bi bi-clock"></i> ${req.time}</small></p>
-                                <button class="btn btn-primary w-100" onclick="showRequestDetails(${req.id})">
-                                    <i class="bi bi-arrow-right"></i> View & Accept
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-            html += '</div>';
-            
-            container.innerHTML = html;
-        }
-
-        function showRequestDetails(requestId) {
-            selectedRequestId = requestId;
-            const modalBody = document.getElementById('modalBody');
-            const requests = {
-                1: {
-                    vehicle: 'Bike',
-                    issue: 'Engine not starting, making strange noise',
-                    location: '28.6200, 77.2150',
-                    distance: '0.5 km',
-                    customer: 'John Doe',
-                    phone: '9876543210',
-                    time: '5 mins ago'
-                },
-                2: {
-                    vehicle: 'Car',
-                    issue: 'Flat tire, need immediate replacement',
-                    location: '28.6180, 77.2100',
-                    distance: '1.2 km',
-                    customer: 'Jane Smith',
-                    phone: '9876543211',
-                    time: '15 mins ago'
-                },
-                3: {
-                    vehicle: 'Auto',
-                    issue: 'Brake fluid leak',
-                    location: '28.6250, 77.2200',
-                    distance: '2.0 km',
-                    customer: 'Mike Johnson',
-                    phone: '9876543212',
-                    time: '1 hour ago'
-                }
-            };
-
-            const req = requests[requestId];
-            if (req) {
-                modalBody.innerHTML = `
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <h6 class="fw-bold text-muted">VEHICLE TYPE</h6>
-                            <p class="fs-5">${req.vehicle}</p>
-                        </div>
-                        <div class="col-md-6">
-                            <h6 class="fw-bold text-muted">DISTANCE</h6>
-                            <p class="fs-5">${req.distance}</p>
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <h6 class="fw-bold text-muted">ISSUE DESCRIPTION</h6>
-                        <p>${req.issue}</p>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <h6 class="fw-bold text-muted">LOCATION</h6>
-                            <p>${req.location}</p>
-                        </div>
-                        <div class="col-md-6">
-                            <h6 class="fw-bold text-muted">TIME</h6>
-                            <p>${req.time}</p>
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h6 class="fw-bold text-muted">CUSTOMER</h6>
-                            <p>${req.customer}</p>
-                        </div>
-                        <div class="col-md-6">
-                            <h6 class="fw-bold text-muted">PHONE</h6>
-                            <p><a href="tel:${req.phone}">${req.phone}</a></p>
-                        </div>
-                    </div>
-                `;
-                
-                const modal = new bootstrap.Modal(document.getElementById('requestModal'));
-                modal.show();
-            }
-        }
-
-        async function acceptRequest() {
-            if (!selectedRequestId) return;
-
-            try {
-                const response = await fetch('/accept-request', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ id: selectedRequestId })
-                });
-
-                const data = await response.json();
-
-                if (response.ok) {
-                    alert(data.message);
-                    bootstrap.Modal.getInstance(document.getElementById('requestModal')).hide();
-                    loadRequests();
-                } else {
-                    alert('Error: ' + data.error);
-                }
-            } catch (error) {
-                alert('Error accepting request: ' + error.message);
-            }
-        }
-    </script>
-</body>
-</html>
+        });
+    });
+</script>
+{% endblock %}

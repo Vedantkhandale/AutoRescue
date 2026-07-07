@@ -1,0 +1,43 @@
+<footer class="site-footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-panel footer-brand-panel">
+                <div class="footer-brand-wrap">
+                    <span class="brand-badge"><i class="bi bi-lightning-charge-fill"></i></span>
+                    <div>
+                        <div class="footer-brand">AutoRescue</div>
+                        <div class="footer-copy">Roadside response platform for customers, mechanics, and operators.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-panel">
+                <div class="footer-title">Platform</div>
+                <a class="footer-link" href="{{ url_for('home') }}">Home</a>
+                <a class="footer-link" href="{{ url_for('register', role='customer') }}">Get Help</a>
+                <a class="footer-link" href="{{ url_for('register', role='mechanic') }}">Mechanic Signup</a>
+            </div>
+
+            <div class="footer-panel">
+                <div class="footer-title">Operations</div>
+                <div class="footer-copy">Live request intake</div>
+                <div class="footer-copy">Role-based dashboards</div>
+                <div class="footer-copy">Admin visibility</div>
+            </div>
+
+            <div class="footer-panel footer-meta">
+                <div class="footer-title">Status</div>
+                <div class="footer-copy">Built for faster dispatch and cleaner rescue workflows.</div>
+                <div class="footer-socials">
+                    <span class="footer-badge">24x7 Rescue</span>
+                    <span class="footer-badge">Live Queue</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="footer-copy">&copy; {{ current_year }} AutoRescue</div>
+            <div class="footer-copy">Made for real roadside operations, not just pretty screenshots.</div>
+        </div>
+    </div>
+</footer>

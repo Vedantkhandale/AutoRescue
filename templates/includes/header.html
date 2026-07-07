@@ -1,0 +1,44 @@
+<nav class="topbar navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand brand-mark" href="{{ url_for('home') }}">
+            <span class="brand-badge"><i class="bi bi-lightning-charge-fill"></i></span>
+            <span>AutoRescue</span>
+        </a>
+
+        <button class="navbar-toggler border-0 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#topNav" aria-controls="topNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="topNav">
+            <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
+                <li class="nav-item">
+                    <a class="nav-link {% if request.endpoint == 'home' %}active{% endif %}" href="{{ url_for('home') }}">Home</a>
+                </li>
+                {% if session.get('user_id') %}
+                <li class="nav-item">
+                    {% if session.get('user_role') == 'customer' %}
+                    <a class="nav-link {% if request.endpoint == 'customer_dashboard' %}active{% endif %}" href="{{ url_for('customer_dashboard') }}">Dashboard</a>
+                    {% elif session.get('user_role') == 'mechanic' %}
+                    <a class="nav-link {% if request.endpoint in ['mechanic_dashboard', 'available_requests'] %}active{% endif %}" href="{{ url_for('mechanic_dashboard') }}">Dashboard</a>
+                    {% elif session.get('user_role') == 'admin' %}
+                    <a class="nav-link {% if request.endpoint == 'admin_dashboard' %}active{% endif %}" href="{{ url_for('admin_dashboard') }}">Dashboard</a>
+                    {% endif %}
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.endpoint in ['view_requests', 'request_service', 'available_requests'] %}active{% endif %}" href="{{ url_for('view_requests') }}">Requests</a>
+                </li>
+                <li class="nav-item"><span class="user-pill">{{ session.get('user_name') }}</span></li>
+                <li class="nav-item"><a class="btn btn-ghost" href="{{ url_for('logout') }}">Logout</a></li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link {% if request.endpoint == 'register' and request.args.get('role', 'customer') != 'mechanic' %}active{% endif %}" href="{{ url_for('register', role='customer') }}">Get Help</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.endpoint == 'register' and request.args.get('role') == 'mechanic' %}active{% endif %}" href="{{ url_for('register', role='mechanic') }}">Join as Mechanic</a>
+                </li>
+                <li class="nav-item"><a class="btn btn-ghost" href="{{ url_for('login') }}">Login</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>

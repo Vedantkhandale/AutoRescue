@@ -1,102 +1,71 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Service Requests - AutoRescue</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    <style>
-        .status-pending { background: #fff3cd; color: #856404; }
-        .status-accepted { background: #d1ecf1; color: #0c5460; }
-        .status-completed { background: #d4edda; color: #155724; }
-        .request-card { transition: all 0.3s ease; }
-        .request-card:hover { box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
-    </style>
-</head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand fw-bold" href="/"><i class="bi bi-car-front-fill"></i> AutoRescue</a>
-            <a href="/logout" class="btn btn-outline-light">Logout</a>
-        </div>
-    </nav>
+{% extends "base.html" %}
 
-    <div class="container py-5">
-        <h2 class="mb-4 fw-bold"><i class="bi bi-list-check"></i> Service Requests</h2>
+{% block title %}Requests | AutoRescue{% endblock %}
+
+{% block content %}
+<section class="section-space">
+    <div class="container">
+        <div class="page-heading">
+            <div>
+                <span class="eyebrow">Request ledger</span>
+                <h1>{% if user.role == 'customer' %}Your service requests{% else %}Platform service requests{% endif %}</h1>
+                <p>{% if can_accept %}Mechanics can accept pending requests directly from this screen.{% else %}Track status, timestamps, and exact coordinates for every request.{% endif %}</p>
+            </div>
+            {% if user.role == 'customer' %}
+            <a href="{{ url_for('request_service') }}" class="btn btn-premium">Create Request</a>
+            {% endif %}
+        </div>
 
         {% if requests %}
-        <div class="row">
+        <div class="request-grid">
             {% for request in requests %}
-            <div class="col-md-6 mb-4">
-                <div class="card request-card shadow-sm">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-start">
-                            <h5 class="card-title fw-bold">Request #{{ request.id }}</h5>
-                            <span class="badge status-{{ request.status|lower }}">{{ request.status }}</span>
-                        </div>
-                        
-                        <hr>
-
-                        <p class="mb-2">
-                            <strong><i class="bi bi-car-front"></i> Vehicle:</strong> {{ request.vehicle_type }}
-                        </p>
-                        <p class="mb-2">
-                            <strong><i class="bi bi-tools"></i> Issue:</strong> {{ request.issue_type }}
-                        </p>
-                        <p class="mb-2">
-                            <strong><i class="bi bi-geo-alt"></i> Location:</strong><br>
-                            Lat: {{ request.latitude }}, Lng: {{ request.longitude }}
-                        </p>
-                        <p class="mb-2 text-muted">
-                            <small><i class="bi bi-calendar"></i> {{ request.created_at.strftime('%d %b %Y, %H:%M') if request.created_at else 'N/A' }}</small>
-                        </p>
-
-                        {% if request.status == 'Pending' %}
-                        <button class="btn btn-success btn-sm w-100" onclick="acceptRequest({{ request.id }})">
-                            <i class="bi bi-check-circle"></i> Accept Request
-                        </button>
-                        {% else %}
-                        <button class="btn btn-secondary btn-sm w-100" disabled>
-                            <i class="bi bi-lock"></i> Already {{ request.status }}
-                        </button>
-                        {% endif %}
+            <article class="job-card priority-{{ request.status|lower }}">
+                <div class="job-card-top">
+                    <div>
+                        <div class="request-title">#{{ request.id }} &middot; {{ request.vehicle_type }}</div>
+                        <p>{{ request.issue_type }}</p>
                     </div>
+                    <span class="status-chip status-{{ request.status|lower }}">{{ request.status }}</span>
                 </div>
-            </div>
+                <div class="job-meta">
+                    <span><i class="bi bi-geo-alt"></i> {{ request.latitude|round(4) }}, {{ request.longitude|round(4) }}</span>
+                    <span><i class="bi bi-clock"></i> {{ request.created_at.strftime('%d %b %Y, %I:%M %p') if request.created_at else 'N/A' }}</span>
+                </div>
+                {% if can_accept and request.status == 'Pending' %}
+                <button class="btn btn-premium w-100 mt-3" data-accept-request data-request-id="{{ request.id }}">Accept Request</button>
+                {% else %}
+                <button class="btn btn-ghost w-100 mt-3" disabled>Status: {{ request.status }}</button>
+                {% endif %}
+            </article>
             {% endfor %}
         </div>
         {% else %}
-        <div class="alert alert-info" role="alert">
-            <i class="bi bi-info-circle"></i> No service requests available at the moment.
+        <div class="empty-state">
+            <i class="bi bi-journal-x"></i>
+            <h3>No requests found</h3>
+            <p>Once requests are created, they will show up here.</p>
         </div>
         {% endif %}
     </div>
+</section>
+{% endblock %}
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        async function acceptRequest(requestId) {
-            if (confirm('Are you sure you want to accept this request?')) {
-                try {
-                    const response = await fetch('/accept-request', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ id: requestId })
-                    });
-
-                    const data = await response.json();
-
-                    if (response.ok) {
-                        alert(data.message);
-                        location.reload();
-                    } else {
-                        alert('Error: ' + data.error);
-                    }
-                } catch (error) {
-                    alert('Failed to accept request: ' + error.message);
-                }
+{% block extra_scripts %}
+{% if can_accept %}
+<script>
+    document.querySelectorAll('[data-accept-request]').forEach((button) => {
+        button.addEventListener('click', async () => {
+            button.disabled = true;
+            try {
+                const result = await AutoRescue.postJson('/accept-request', { id: button.dataset.requestId });
+                AutoRescue.toast(result.message);
+                window.setTimeout(() => window.location.reload(), 700);
+            } catch (error) {
+                button.disabled = false;
+                AutoRescue.toast(error.message, 'danger');
             }
-        }
-    </script>
-</body>
-</html>
+        });
+    });
+</script>
+{% endif %}
+{% endblock %}
