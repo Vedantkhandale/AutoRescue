@@ -1,281 +1,199 @@
 {% extends "base.html" %}
 
-{% block title %}AutoRescue | Live Telemetry & Emergency Dispatch Console{% endblock %}
+{% block title %}AutoRescue | Roadside Help, Right When You Need It{% endblock %}
+{% block body_class %}home-page{% endblock %}
 
 {% block content %}
-<!-- Ambient Cybernetic Glow Layers & Scanlines -->
-<div class="cyber-scanline"></div>
-<div class="ambient-glow ambient-glow-left"></div>
-<div class="ambient-glow ambient-glow-right"></div>
-
-<section class="hero-section hero-home position-relative overflow-hidden">
-    <!-- Matrix Dot Mesh Background Overlay via Utility Classes -->
-    <div class="absolute-inset bg-grid-matrix opacity-10"></div>
-    
-    <div class="container position-relative z-index-2">
-        <div class="hero-shell">
-            <div class="row align-items-center g-5">
-                <div class="col-xl-7">
-                    <!-- Real-time Status Header Badge -->
-                    <div class="d-inline-flex align-items-center gap-2 live-status-badge mb-4 animate-pulse-border">
-                        <span class="ping-indicator">
-                            <span class="ping-circle"></span>
-                            <span class="ping-pulse"></span>
-                        </span>
-                        <span class="font-monospace text-uppercase tracking-widest text-xs text-glow-green">System Status: CORE_OPERATIONAL</span>
-                    </div>
-
-                    <h1 class="hero-title hero-home-title text-gradient-cyber">Breakdown response that looks sharp and works in the real world.</h1>
-                    <p class="hero-copy hero-home-copy text-muted-cyber">AutoRescue runs like a high-throughput, mission-critical dispatch infrastructure. Intercepting exact geographic breakdowns, synchronizing field mechanics via localized priority queues, and projecting real-time platform telemetry for administrative oversight.</p>
-
-                    <!-- Advanced Interaction CTA Cluster -->
-                    <div class="hero-cta-row dynamic-glow-cta mt-4 pt-2">
-                        {% if session.get('user_role') == 'customer' %}
-                        <a href="{{ url_for('request_service') }}" class="btn btn-premium-cyber btn-lg group">
-                            <span class="btn-text">Broadcast Distress Signal</span> 
-                            <i class="bi bi-broadcast-pin ms-2 animate-flicker text-danger"></i>
-                        </a>
-                        {% elif session.get('user_role') == 'mechanic' %}
-                        <a href="{{ url_for('available_requests') }}" class="btn btn-premium-cyber btn-lg group">
-                            <i class="bi bi-terminal-split me-2 text-info"></i>
-                            <span class="btn-text">Initialize Active Grid Queue</span>
-                        </a>
-                        {% elif session.get('user_role') == 'admin' %}
-                        <a href="{{ url_for('admin_dashboard') }}" class="btn btn-premium-cyber btn-lg group">
-                            <i class="bi bi-shield-lock-fill me-2 text-warning"></i>
-                            <span class="btn-text">Access Central Command Console</span>
-                        </a>
-                        {% else %}
-                        <a href="{{ url_for('register', role='customer') }}" class="btn btn-premium-cyber btn-lg group">
-                            <span class="btn-text">File Emergency Intake</span> 
-                            <i class="bi bi-cone-striped ms-2 text-warning"></i>
-                        </a>
-                        {% endif %}
-                        <a href="{{ url_for('register', role='mechanic') }}" class="btn btn-soft-cyber btn-lg">
-                            <i class="bi bi-cpu-fill me-2 transition-transform group-hover-rotate"></i>
-                            <span>Deploy Rescuer Node</span>
-                        </a>
-                    </div>
-
-                    <!-- Live Hardware Sync Pills -->
-                    <div class="hero-pulse-row mt-4 pt-3">
-                        <div class="hero-pill-cyber"><i class="bi bi-fingerprint text-success"></i> RBAC Crypt-Verified</div>
-                        <div class="hero-pill-cyber"><i class="bi bi-radar text-info animate-spin-slow"></i> GPS Multi-Triangulation</div>
-                        <div class="hero-pill-cyber"><i class="bi bi-activity text-warning"></i> High-Frequency Queue Sync</div>
-                    </div>
-
-                    <!-- Cyberpunk Metric Counter Grid Layout -->
-                    <div class="hero-metrics row g-3 mt-4">
-                        <div class="col-sm-4">
-                            <div class="metric-card-cyber metric-accent-cyan">
-                                <div class="metric-header-meta">NODE_POOL</div>
-                                <div class="metric-value font-monospace text-glow-cyan">{{ stats.mechanics }}</div>
-                                <div class="metric-label">Synchronized Rescuers</div>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="metric-card-cyber metric-accent-orange">
-                                <div class="metric-header-meta">BUFFER_LOAD</div>
-                                <div class="metric-value font-monospace text-glow-orange">{{ stats.requests }}</div>
-                                <div class="metric-label">Concurrent Transmissions</div>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="metric-card-cyber metric-accent-green">
-                                <div class="metric-header-meta">ARCHIVE_STATE</div>
-                                <div class="metric-value font-monospace text-glow-green">{{ stats.resolved }}</div>
-                                <div class="metric-label">Cleared Incidents</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Live Control Feed Console Component -->
-                <div class="col-xl-5">
-                    <div class="hero-command-card border-glow-cyber modern-dark-blur">
-                        <div class="hero-command-head border-bottom-cyber">
-                            <div class="command-status">
-                                <span class="signal-live-blink"></span>
-                                <span class="font-monospace text-uppercase text-xs tracking-wider text-muted">Network Telemetry Monitor</span>
-                            </div>
-                            <span class="hero-feed-tag font-monospace bg-dark-badge border-cyber-xs">SYS_LOG_V2</span>
-                        </div>
-
-                        <div class="hero-command-stack p-3">
-                            <!-- High Priority Incident Packet -->
-                            <div class="command-card-cyber hot animate-glow-pulse mb-3">
-                                <div class="command-card-top mb-2">
-                                    <strong class="text-white d-flex align-items-center gap-2 font-monospace text-sm">
-                                        <i class="bi bi-exclamation-octagon-fill text-danger text-glow-red animate-flicker"></i> INCIDENT_0x7F4B
-                                    </strong>
-                                    <span class="priority-pill-cyber priority-high-cyber font-monospace">CRITICAL</span>
-                                </div>
-                                <p class="font-monospace text-xs text-muted mb-3">Powertrain detachment sequence with thermal discharge. Intercepting location matrices... Mapping closest response vectors.</p>
-                                <div class="command-card-meta border-top-cyber-dashed pt-2">
-                                    <span class="font-monospace text-xs"><i class="bi bi-people-fill text-cyan"></i> USERS: {{ stats.customers }}</span>
-                                    <span class="font-monospace text-xs text-success"><i class="bi bi-check-all"></i> STATUS: 200_OK</span>
-                                </div>
-                            </div>
-
-                            <!-- System Status Packet -->
-                            <div class="command-card-cyber mb-3">
-                                <div class="command-card-top mb-2">
-                                    <strong class="text-white font-monospace text-sm">GRID_INFRASTRUCTURE</strong>
-                                    <span class="priority-pill-cyber priority-low-cyber font-monospace">NOMINAL</span>
-                                </div>
-                                <p class="font-monospace text-xs text-muted mb-3">{{ stats.mechanics }} active rescuer threads locked within perimeter. Load balanced routing parameters computed successfully.</p>
-                                <div class="command-card-meta border-top-cyber-dashed pt-2">
-                                    <span class="font-monospace text-xs"><i class="bi bi-diagram-3-fill text-purple"></i> MESH_SUBNET</span>
-                                    <span class="font-monospace text-xs text-info"><i class="bi bi-shield-check"></i> E2EE_ACTIVE</span>
-                                </div>
-                            </div>
-
-                            <!-- Integrated Mini Control Panels -->
-                            <div class="command-grid row g-2">
-                                <div class="col-6">
-                                    <div class="mini-panel-cyber">
-                                        <span class="font-monospace text-xs text-muted">JOB_BUFFER</span>
-                                        <strong class="font-monospace text-lg text-white d-block my-1">{{ stats.requests }}</strong>
-                                        <small class="font-monospace text-xxs text-muted">STACK INDEXED</small>
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="mini-panel-cyber">
-                                        <span class="font-monospace text-xs text-muted">RESOLUTION_LOG</span>
-                                        <strong class="font-monospace text-lg text-white d-block my-1">{{ stats.resolved }}</strong>
-                                        <small class="font-monospace text-xxs text-muted">STATE_COMMITTED</small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Continuous High-Speed Infinit Loop Marquee -->
-<section class="section-space py-3 overflow-hidden border-top-cyber border-bottom-cyber bg-black-gradient">
-    <div class="container-fluid px-0">
-        <div class="brand-strip marquee-infinite d-flex flex-nowrap align-items-center gap-5">
-            <span class="font-monospace text-uppercase text-glow-yellow"><i class="bi bi-cone-striped me-2 text-warning"></i> Emergency Telemetry Intake</span>
-            <span class="font-monospace text-uppercase text-glow-cyan"><i class="bi bi-geo-alt-fill me-2 text-info"></i> Real-time Queue Dispatch Matrix</span>
-            <span class="font-monospace text-uppercase text-glow-red"><i class="bi bi-sliders me-2 text-danger"></i> Central Operator Overlord Engine</span>
-            <span class="font-monospace text-uppercase text-glow-green"><i class="bi bi-arrow-repeat me-2 text-success"></i> Zero-Stale State Pipeline</span>
-            <span class="font-monospace text-uppercase text-glow-purple"><i class="bi bi-eye-fill me-2 text-primary"></i> Multi-Node System Visibility</span>
-            <!-- Mirror Duplicate Nodes for Perfect CSS Continuity loop -->
-            <span class="font-monospace text-uppercase text-glow-yellow"><i class="bi bi-cone-striped me-2 text-warning"></i> Emergency Telemetry Intake</span>
-            <span class="font-monospace text-uppercase text-glow-cyan"><i class="bi bi-geo-alt-fill me-2 text-info"></i> Real-time Queue Dispatch Matrix</span>
-            <span class="font-monospace text-uppercase text-glow-red"><i class="bi bi-sliders me-2 text-danger"></i> Central Operator Overlord Engine</span>
-            <span class="font-monospace text-uppercase text-glow-green"><i class="bi bi-arrow-repeat me-2 text-success"></i> Zero-Stale State Pipeline</span>
-            <span class="font-monospace text-uppercase text-glow-purple"><i class="bi bi-eye-fill me-2 text-primary"></i> Multi-Node System Visibility</span>
-        </div>
-    </div>
-</section>
-
-<!-- Product Engine Tech Specs Section -->
-<section class="section-space pt-0">
+<section class="rescue-hero">
     <div class="container">
-        <div class="section-heading section-heading-centered mb-5">
-            <span class="eyebrow"><i class="bi bi-cpu-fill me-1 text-cyan"></i> ENGINE CORE REFACTORED</span>
-            <h2 class="text-white">Design refined. Layout anomalies purged. Operation logs corrected.</h2>
-            <p class="max-w-xl text-muted-cyber mx-auto">The dispatch layout processes asynchronous states gracefully while presenting data payloads across cleanly isolated system views.</p>
-        </div>
+        <div class="rescue-hero-shell">
+            <div class="rescue-hero-copy">
+                <div class="availability-badge">
+                    <span class="availability-dot"></span>
+                    24/7 roadside assistance is online
+                </div>
 
-        <div class="row g-4">
-            <div class="col-lg-4">
-                <div class="feature-card-tall-cyber border-glow-hover-cyan">
-                    <div class="feature-icon-wrapper-cyber border-cyan mb-3">
-                        <i class="bi bi-lightning-charge-fill text-glow-cyan"></i>
+                <h1>Stranded on the road?<br><span>We’ll get you moving.</span></h1>
+                <p>Share your location, explain the issue, and connect with a nearby mechanic—without the stress, endless calls, or guesswork.</p>
+
+                <div class="hero-action-group">
+                    {% if session.get('user_role') == 'customer' %}
+                    <a href="{{ url_for('request_service') }}" class="btn btn-rescue-primary btn-lg">
+                        <i class="bi bi-lightning-charge-fill"></i>
+                        Request help now
+                    </a>
+                    {% elif session.get('user_role') == 'mechanic' %}
+                    <a href="{{ url_for('available_requests') }}" class="btn btn-rescue-primary btn-lg">
+                        <i class="bi bi-broadcast-pin"></i>
+                        View rescue requests
+                    </a>
+                    {% elif session.get('user_role') == 'admin' %}
+                    <a href="{{ url_for('admin_dashboard') }}" class="btn btn-rescue-primary btn-lg">
+                        <i class="bi bi-grid-1x2-fill"></i>
+                        Open command center
+                    </a>
+                    {% else %}
+                    <a href="{{ url_for('register', role='customer') }}" class="btn btn-rescue-primary btn-lg">
+                        <i class="bi bi-lightning-charge-fill"></i>
+                        Get roadside help
+                    </a>
+                    {% endif %}
+                    <a href="#how-it-works" class="btn btn-rescue-secondary btn-lg">
+                        How it works <i class="bi bi-arrow-down-right"></i>
+                    </a>
+                </div>
+
+                <div class="hero-proof">
+                    <div class="avatar-stack" aria-hidden="true">
+                        <span>RK</span><span>SN</span><span>AM</span>
                     </div>
-                    <h3 class="text-white">Reactive Telemetry</h3>
-                    <p class="text-muted-cyber">Distress inputs stream straight into an atomic buffer queue, eliminating manual page re-polling and dead locks.</p>
-                    <div class="feature-tag-row mt-auto">
-                        <span class="feature-tag-cyber border-cyan text-cyan">ACTIVE PIPELINE</span>
-                        <span class="feature-tag-cyber">ZERO POLLING</span>
-                    </div>
+                    <p><strong>Always ready to respond</strong><br>Built for drivers, local mechanics, and operators.</p>
                 </div>
             </div>
-            <div class="col-lg-4">
-                <div class="feature-card-tall-cyber border-glow-hover-purple">
-                    <div class="feature-icon-wrapper-cyber border-purple mb-3">
-                        <i class="bi bi-layers-half text-glow-purple"></i>
+
+            <div class="rescue-hero-visual" aria-label="AutoRescue live dispatch preview">
+                <div class="map-grid" aria-hidden="true"></div>
+                <div class="route route-main" aria-hidden="true"></div>
+                <div class="route route-alt" aria-hidden="true"></div>
+                <div class="map-pin pin-customer"><i class="bi bi-car-front-fill"></i></div>
+                <div class="map-pin pin-mechanic"><i class="bi bi-tools"></i></div>
+
+                <div class="dispatch-panel">
+                    <div class="dispatch-panel-head">
+                        <div>
+                            <span class="panel-overline">Live dispatch</span>
+                            <strong>Help is being matched</strong>
+                        </div>
+                        <span class="panel-live"><i class="bi bi-broadcast"></i> Live</span>
                     </div>
-                    <h3>Isolated Layout DOM</h3>
-                    <p class="text-white-50">Global partial components handle state mapping isolated from main view loops, allowing independent theme re-rendering.</p>
-                    <div class="feature-tag-row mt-auto">
-                        <span class="feature-tag-cyber border-purple text-purple">PARTIAL_CACHE</span>
-                        <span class="feature-tag-cyber">ATOMIC DOM</span>
+
+                    <div class="dispatch-route">
+                        <div class="route-node route-node-start"><i class="bi bi-geo-alt-fill"></i></div>
+                        <div class="route-line"></div>
+                        <div class="route-node route-node-end"><i class="bi bi-tools"></i></div>
+                        <div class="route-label route-label-start">You</div>
+                        <div class="route-label route-label-end">Mechanic</div>
+                    </div>
+
+                    <div class="dispatch-status-card">
+                        <span class="status-icon"><i class="bi bi-shield-check"></i></span>
+                        <div>
+                            <strong>Location shared safely</strong>
+                            <span>Matching the nearest available pro</span>
+                        </div>
+                        <i class="bi bi-chevron-right"></i>
                     </div>
                 </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="feature-card-tall-cyber border-glow-hover-green">
-                    <div class="feature-icon-wrapper-cyber border-green mb-3">
-                        <i class="bi bi-shield-lock-fill text-glow-green"></i>
-                    </div>
-                    <h3>Hardened Session Scopes</h3>
-                    <p class="text-white-50">Role-Based Access Controls (RBAC) parse identity states safely to keep roadside users, mechanics, and admins completely segmented.</p>
-                    <div class="feature-tag-row mt-auto">
-                        <span class="feature-tag-cyber border-green text-green">RBAC_VERIFIED</span>
-                        <span class="feature-tag-cyber">SECURE_NODES</span>
-                    </div>
-                </div>
+
+                <div class="floating-chip chip-eta"><i class="bi bi-clock-history"></i><span>Average response<br><strong>under 20 min</strong></span></div>
+                <div class="floating-chip chip-signal"><span class="mini-signal"></span> Rescue network active</div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Advanced Execution Pipeline Timelines -->
-<section class="section-space section-dark-cyber position-relative border-top-cyber border-bottom-cyber">
+<section class="confidence-strip">
     <div class="container">
-        <div class="section-heading d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between mb-5">
+        <div class="confidence-grid">
+            <div><i class="bi bi-geo-alt"></i><span>Location-backed<br><strong>rescue requests</strong></span></div>
+            <div><i class="bi bi-person-check"></i><span>Dedicated portals for<br><strong>drivers & mechanics</strong></span></div>
+            <div><i class="bi bi-clipboard2-check"></i><span>Live request status<br><strong>from open to resolved</strong></span></div>
+            <div><i class="bi bi-shield-lock"></i><span>Role-based access<br><strong>for every account</strong></span></div>
+        </div>
+    </div>
+</section>
+
+<section class="section-space rescue-intro">
+    <div class="container">
+        <div class="rescue-section-heading">
             <div>
-                <span class="eyebrow"><i class="bi bi-git me-1 text-orange"></i> EXECUTION LIFECYCLE</span>
-                <h2 class="text-white">Built around actual rescue telemetry.</h2>
+                <span class="eyebrow eyebrow-rescue">One platform. Three clear roles.</span>
+                <h2>Roadside help that feels calm, not chaotic.</h2>
             </div>
-            <p class="text-md-start text-muted-cyber max-w-md mt-3 mt-md-0">Engineered to abstract backend state mutation into highly intuitive, zero-friction operator layouts during critical events.</p>
+            <p>AutoRescue keeps the important parts simple: drivers get help, mechanics see work nearby, and operators always know what’s happening.</p>
         </div>
 
-        <div class="process-timeline row g-4">
-            <div class="col-lg-4">
-                <div class="process-card-wide-cyber h-100">
-                    <div class="timeline-step-indicator font-monospace text-glow-orange">01</div>
-                    <h3 class="text-white">Signal Propagation</h3>
-                    <p class="text-muted-cyber">User vehicle configuration, diagnostic data payloads, and live GPS variables get packaged and piped into the dispatch router.</p>
-                </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="process-card-wide-cyber h-100">
-                    <div class="timeline-step-indicator font-monospace text-glow-cyan">02</div>
-                    <h3 class="text-white">Queue Allocation</h3>
-                    <p class="text-muted-cyber">Incident payload packets load dynamically into the active operator matrix, sorted by geometric proximity coordinates.</p>
-                </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="process-card-wide-cyber h-100">
-                    <div class="timeline-step-indicator font-monospace text-glow-green">03</div>
-                    <h3 class="text-white">Central Operations Audit</h3>
-                    <p class="text-muted-cyber">Platform supervisors monitor absolute fleet utilization rates, transit latency offsets, and macro infrastructure diagnostics.</p>
-                </div>
-            </div>
+        <div class="role-feature-grid">
+            <article class="role-feature-card role-feature-driver">
+                <div class="role-card-icon"><i class="bi bi-car-front-fill"></i></div>
+                <span class="role-card-number">01</span>
+                <h3>For drivers</h3>
+                <p>Send a rescue request in minutes with your vehicle details and exact breakdown location.</p>
+                <a href="{{ url_for('register', role='customer') }}">Get help <i class="bi bi-arrow-up-right"></i></a>
+            </article>
+            <article class="role-feature-card role-feature-mechanic">
+                <div class="role-card-icon"><i class="bi bi-tools"></i></div>
+                <span class="role-card-number">02</span>
+                <h3>For mechanics</h3>
+                <p>See open jobs, understand distance, and accept the requests that fit your service area.</p>
+                <a href="{{ url_for('register', role='mechanic') }}">Join the network <i class="bi bi-arrow-up-right"></i></a>
+            </article>
+            <article class="role-feature-card role-feature-operator">
+                <div class="role-card-icon"><i class="bi bi-grid-1x2-fill"></i></div>
+                <span class="role-card-number">03</span>
+                <h3>For operators</h3>
+                <p>Monitor people, mechanics, requests, and completed jobs from one focused dashboard.</p>
+                <a href="{{ url_for('login') }}">Open dashboard <i class="bi bi-arrow-up-right"></i></a>
+            </article>
         </div>
     </div>
 </section>
 
-<!-- Operational Sandbox Sandbox Action Area -->
-<section class="section-space">
+<section id="how-it-works" class="section-space how-it-works-section">
     <div class="container">
-        <div class="cta-banner-cyber match-hero-depth-cyber">
-            <div class="max-w-2xl">
-                <span class="eyebrow"><i class="bi bi-terminal-box-fill me-1 text-cyan"></i> SIMULATION_SANDBOX</span>
-                <h2 class="text-white">Want to simulate the full execution flow right now?</h2>
-                <p class="text-muted-cyber mt-2">Initialize an incident payload with driver privileges, observe active queue routing variables, and instantly cross-authenticate as a partner operator to claim the task node.</p>
+        <div class="how-it-works-layout">
+            <div class="how-it-works-copy">
+                <span class="eyebrow eyebrow-rescue">How it works</span>
+                <h2>From breakdown to backup in three simple steps.</h2>
+                <p>No complicated flow. Just the information a mechanic needs to start helping you.</p>
+                <div class="rescue-stat-row">
+                    <div><strong>{{ stats.mechanics }}</strong><span>mechanics in<br>the network</span></div>
+                    <div><strong>{{ stats.requests }}</strong><span>rescue requests<br>logged</span></div>
+                    <div><strong>{{ stats.resolved }}</strong><span>requests<br>progressed</span></div>
+                </div>
             </div>
-            <div class="cta-banner-actions-cyber mt-4 mt-lg-0">
-                <a href="{{ url_for('login') }}" class="btn btn-premium-cyber btn-lg">Access Command Hub</a>
-                <a href="{{ url_for('register') }}" class="btn btn-soft-cyber btn-lg">Provision Test Node</a>
+
+            <ol class="rescue-steps">
+                <li>
+                    <span class="step-number">01</span>
+                    <div><h3>Tell us what happened</h3><p>Add your vehicle type and a clear description of the issue.</p></div>
+                    <i class="bi bi-chat-left-text"></i>
+                </li>
+                <li>
+                    <span class="step-number">02</span>
+                    <div><h3>Pin your exact location</h3><p>Use the map or your device location so help knows where to go.</p></div>
+                    <i class="bi bi-geo-alt"></i>
+                </li>
+                <li>
+                    <span class="step-number">03</span>
+                    <div><h3>Track the rescue</h3><p>Follow your request as it moves from pending to accepted and completed.</p></div>
+                    <i class="bi bi-check2-circle"></i>
+                </li>
+            </ol>
+        </div>
+    </div>
+</section>
+
+<section class="section-space rescue-cta-section">
+    <div class="container">
+        <div class="rescue-cta-card">
+            <div class="cta-orbit cta-orbit-one" aria-hidden="true"></div>
+            <div class="cta-orbit cta-orbit-two" aria-hidden="true"></div>
+            <div class="cta-content">
+                <span class="eyebrow eyebrow-light">Ready when the road isn’t.</span>
+                <h2>Need a hand? Start your rescue request now.</h2>
+                <p>Get your account set up today so help is only a few taps away when you need it.</p>
+                <div class="hero-action-group">
+                    <a href="{{ url_for('register', role='customer') }}" class="btn btn-cta-light btn-lg"><i class="bi bi-lightning-charge-fill"></i> Create driver account</a>
+                    <a href="{{ url_for('register', role='mechanic') }}" class="btn btn-cta-outline btn-lg">Become a mechanic</a>
+                </div>
+            </div>
+            <div class="cta-art" aria-hidden="true">
+                <div class="cta-art-road"></div>
+                <i class="bi bi-car-front-fill"></i>
+                <span class="cta-art-spark spark-one"></span>
+                <span class="cta-art-spark spark-two"></span>
+                <span class="cta-art-spark spark-three"></span>
             </div>
         </div>
     </div>
