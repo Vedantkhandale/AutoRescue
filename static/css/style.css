@@ -2284,6 +2284,39 @@ section:has(.brand-strip) {
 .dashboard-page .request-row p { font-size: 0.84rem; }
 .dashboard-page .request-meta small { color: #8fa3b9; font-size: 0.73rem; }
 
+.dashboard-page .request-grid {
+    grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+}
+
+.dashboard-page .job-card {
+    position: relative;
+    overflow: hidden;
+    border-color: rgba(255, 255, 255, 0.09);
+    background: linear-gradient(145deg, rgba(18, 36, 57, 0.88), rgba(8, 19, 33, 0.93));
+    box-shadow: 0 1rem 2.2rem rgba(0, 0, 0, 0.15);
+}
+
+.dashboard-page .job-card::before {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(251, 146, 60, 0.8), transparent);
+    content: "";
+}
+
+.dashboard-page .job-card:hover {
+    border-color: rgba(251, 146, 60, 0.28);
+    box-shadow: 0 1.4rem 2.8rem rgba(0, 0, 0, 0.22);
+    transform: translateY(-0.35rem);
+}
+
+.dashboard-page .job-card-top p { font-size: 0.86rem; line-height: 1.55; }
+.dashboard-page .job-meta { color: #8fa5b9; font-size: 0.78rem; }
+.dashboard-page .job-meta i { color: #f9ad68; }
+.dashboard-page .job-card .btn:disabled { cursor: wait; opacity: 0.78; transform: none; }
+
 .dashboard-page .data-table {
     position: relative;
     z-index: 1;

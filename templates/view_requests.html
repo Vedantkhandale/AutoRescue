@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}Requests | AutoRescue{% endblock %}
+{% block body_class %}dashboard-page{% endblock %}
 
 {% block content %}
 <section class="section-space">
@@ -12,7 +13,7 @@
                 <p>{% if can_accept %}Mechanics can accept pending requests directly from this screen.{% else %}Track status, timestamps, and exact coordinates for every request.{% endif %}</p>
             </div>
             {% if user.role == 'customer' %}
-            <a href="{{ url_for('request_service') }}" class="btn btn-premium">Create Request</a>
+            <a href="{{ url_for('request_service') }}" class="btn btn-rescue-primary"><i class="bi bi-plus-lg"></i> Create request</a>
             {% endif %}
         </div>
 
@@ -55,13 +56,13 @@
 <script>
     document.querySelectorAll('[data-accept-request]').forEach((button) => {
         button.addEventListener('click', async () => {
-            button.disabled = true;
+            const restoreButton = AutoRescue.setButtonLoading(button, 'Accepting request…');
             try {
                 const result = await AutoRescue.postJson('/accept-request', { id: button.dataset.requestId });
                 AutoRescue.toast(result.message);
                 window.setTimeout(() => window.location.reload(), 700);
             } catch (error) {
-                button.disabled = false;
+                restoreButton();
                 AutoRescue.toast(error.message, 'danger');
             }
         });

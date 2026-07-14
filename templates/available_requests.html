@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}Available Requests | AutoRescue{% endblock %}
+{% block body_class %}dashboard-page{% endblock %}
 
 {% block content %}
 <section class="section-space">
@@ -52,13 +53,13 @@
 <script>
     document.querySelectorAll('[data-accept-request]').forEach((button) => {
         button.addEventListener('click', async () => {
-            button.disabled = true;
+            const restoreButton = AutoRescue.setButtonLoading(button, 'Accepting request…');
             try {
                 const result = await AutoRescue.postJson('/accept-request', { id: button.dataset.requestId });
                 AutoRescue.toast(result.message);
                 window.setTimeout(() => window.location.reload(), 700);
             } catch (error) {
-                button.disabled = false;
+                restoreButton();
                 AutoRescue.toast(error.message, 'danger');
             }
         });
