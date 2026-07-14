@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}Mechanic Dashboard | AutoRescue{% endblock %}
+{% block body_class %}dashboard-page{% endblock %}
 
 {% block content %}
 <section class="section-space">
@@ -11,34 +12,34 @@
                 <h1>{{ mechanic.shop_name if mechanic else user.name }} dispatch board</h1>
                 <p>{% if mechanic %}{{ mechanic.experience }} years experience &middot; {{ mechanic.availability }} for roadside jobs{% else %}Complete your mechanic profile to improve route accuracy.{% endif %}</p>
             </div>
-            <a href="{{ url_for('available_requests') }}" class="btn btn-premium">Browse All Available Requests</a>
+            <a href="{{ url_for('available_requests') }}" class="btn btn-rescue-primary"><i class="bi bi-broadcast-pin"></i> Browse available requests</a>
         </div>
 
         <div class="row g-4">
             <div class="col-md-6 col-xl-3">
-                <div class="dashboard-card stat-surface">
-                    <span class="stat-kicker">Pending in network</span>
+                <div class="dashboard-card stat-surface stat-card stat-card-pending">
+                    <div class="stat-card-top"><span class="stat-icon"><i class="bi bi-broadcast"></i></span><span class="stat-kicker">Pending in network</span></div>
                     <strong>{{ stats.pending }}</strong>
                     <p>Open requests customers are waiting on.</p>
                 </div>
             </div>
             <div class="col-md-6 col-xl-3">
-                <div class="dashboard-card stat-surface">
-                    <span class="stat-kicker">Accepted overall</span>
+                <div class="dashboard-card stat-surface stat-card stat-card-accepted">
+                    <div class="stat-card-top"><span class="stat-icon"><i class="bi bi-clipboard2-check"></i></span><span class="stat-kicker">Accepted overall</span></div>
                     <strong>{{ stats.accepted }}</strong>
                     <p>Requests already picked by the team.</p>
                 </div>
             </div>
             <div class="col-md-6 col-xl-3">
-                <div class="dashboard-card stat-surface">
-                    <span class="stat-kicker">Completed overall</span>
+                <div class="dashboard-card stat-surface stat-card stat-card-completed">
+                    <div class="stat-card-top"><span class="stat-icon"><i class="bi bi-check2-circle"></i></span><span class="stat-kicker">Completed overall</span></div>
                     <strong>{{ stats.completed }}</strong>
                     <p>Finished rescue jobs on the platform.</p>
                 </div>
             </div>
             <div class="col-md-6 col-xl-3">
-                <div class="dashboard-card stat-surface">
-                    <span class="stat-kicker">Rating</span>
+                <div class="dashboard-card stat-surface stat-card stat-card-rating">
+                    <div class="stat-card-top"><span class="stat-icon"><i class="bi bi-star-fill"></i></span><span class="stat-kicker">Rating</span></div>
                     <strong>{{ mechanic.rating if mechanic else 4.8 }}</strong>
                     <p>Trust signal customers care about.</p>
                 </div>
@@ -47,7 +48,7 @@
 
         <div class="row g-4 mt-1">
             <div class="col-lg-4">
-                <div class="dashboard-card info-card">
+                <div class="dashboard-card info-card action-panel">
                     <span class="eyebrow">Coverage</span>
                     <h3>{% if mechanic %}Service radius anchored to your saved location.{% else %}Location missing for precise matching.{% endif %}</h3>
                     <p>{% if mechanic %}Saved coordinates: {{ mechanic.latitude|round(4) }}, {{ mechanic.longitude|round(4) }}. Nearby requests are sorted with distance context where possible.{% else %}Ask an admin to seed your mechanic profile or register a fresh mechanic account with location info.{% endif %}</p>
@@ -56,7 +57,7 @@
             </div>
 
             <div class="col-lg-8">
-                <div class="dashboard-card list-card">
+                <div class="dashboard-card list-card elevated-list-card">
                     <div class="section-inline-header">
                         <div>
                             <span class="eyebrow">Hot queue</span>

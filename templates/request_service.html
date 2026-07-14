@@ -1,73 +1,105 @@
 {% extends "base.html" %}
 
-{% block title %}Request Service | AutoRescue{% endblock %}
+{% block title %}Request Roadside Help | AutoRescue{% endblock %}
+{% block body_class %}rescue-request-page{% endblock %}
 
 {% block extra_head %}
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 {% endblock %}
 
 {% block content %}
-<section class="section-space">
+<section class="section-space rescue-request-section">
     <div class="container">
-        <div class="row g-4">
-            <div class="col-lg-5">
-                <div class="dashboard-card info-card h-100">
-                    <span class="eyebrow">Customer rescue form</span>
-                    <h1>Tell us what happened and pin the breakdown spot.</h1>
-                    <p>We removed the fake map key and replaced it with a working OpenStreetMap-based location picker.</p>
-                    <button type="button" id="captureLocation" class="btn btn-soft mt-3">Use Current Location</button>
-                    <div class="location-note mt-4">
-                        <strong>Tip</strong>
-                        <p class="mb-0">You can also click anywhere on the map to adjust the exact pickup point.</p>
-                    </div>
-                </div>
+        <div class="request-page-heading">
+            <div>
+                <span class="eyebrow eyebrow-rescue"><i class="bi bi-life-preserver"></i> Roadside rescue</span>
+                <h1>Let’s get you safely back on the road.</h1>
+                <p>Share a few details and your live location. A nearby mechanic can then see exactly what help you need.</p>
             </div>
+            <div class="request-heading-status"><span class="availability-dot"></span> Rescue network online</div>
+        </div>
 
-            <div class="col-lg-7">
-                <div class="dashboard-card">
-                    <div class="section-inline-header">
-                        <div>
-                            <span class="eyebrow">Emergency intake</span>
-                            <h3>Request a mechanic</h3>
+        <div class="rescue-request-layout">
+            <aside class="rescue-guidance-card">
+                <div class="guidance-card-top">
+                    <span class="guidance-icon"><i class="bi bi-lightning-charge-fill"></i></span>
+                    <span>Fast emergency intake</span>
+                </div>
+                <h2>Three details. One clear rescue request.</h2>
+                <p>Your request is shared only with the people who need it to help you.</p>
+
+                <div class="guidance-steps">
+                    <div><span>1</span><p><strong>Describe the issue</strong> so the mechanic comes prepared.</p></div>
+                    <div><span>2</span><p><strong>Confirm your location</strong> using the map or GPS.</p></div>
+                    <div><span>3</span><p><strong>Send the request</strong> and track it from your dashboard.</p></div>
+                </div>
+
+                <div class="guidance-tip">
+                    <i class="bi bi-info-circle"></i>
+                    <p><strong>Quick tip</strong> Choose a safe spot and add details like smoke, tyre damage, or a no-start issue.</p>
+                </div>
+            </aside>
+
+            <div class="rescue-form-card">
+                <div class="form-card-heading">
+                    <div>
+                        <span class="form-step-label">Step 1 of 1</span>
+                        <h2>Request a mechanic</h2>
+                        <p>Everything marked below helps us route the right help.</p>
+                    </div>
+                    <span class="form-lock"><i class="bi bi-shield-check"></i> Protected</span>
+                </div>
+
+                <div id="alertBox" aria-live="polite"></div>
+
+                <form id="serviceForm" class="rescue-service-form">
+                    <div class="form-section-heading">
+                        <span><i class="bi bi-car-front"></i></span>
+                        <div><strong>Vehicle & issue</strong><small>Help the mechanic understand the situation.</small></div>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-md-5">
+                            <label class="form-label" for="vehicleType">Vehicle type</label>
+                            <select id="vehicleType" class="form-select form-select-lg" name="vehicle_type" required>
+                                <option value="">Choose vehicle</option>
+                                <option value="Bike">Bike</option>
+                                <option value="Car">Car</option>
+                                <option value="SUV">SUV</option>
+                                <option value="Truck">Truck</option>
+                                <option value="EV">EV</option>
+                            </select>
+                        </div>
+                        <div class="col-md-7">
+                            <label class="form-label" for="issueType">What happened?</label>
+                            <textarea id="issueType" class="form-control form-control-lg" name="issue_type" rows="3" placeholder="Example: Car will not start after smoke from the engine bay." required></textarea>
                         </div>
                     </div>
 
-                    <div id="alertBox"></div>
+                    <div class="form-section-heading form-section-location">
+                        <span><i class="bi bi-geo-alt"></i></span>
+                        <div><strong>Breakdown location</strong><small>Tap the map or use your device location for the exact pickup point.</small></div>
+                        <button type="button" id="captureLocation" class="btn btn-location"><i class="bi bi-crosshair"></i> Use my location</button>
+                    </div>
 
-                    <form id="serviceForm" class="form-grid">
-                        <div class="row g-3">
-                            <div class="col-md-5">
-                                <label class="form-label">Vehicle type</label>
-                                <select class="form-select form-select-lg" name="vehicle_type" required>
-                                    <option value="">Choose vehicle</option>
-                                    <option value="Bike">Bike</option>
-                                    <option value="Car">Car</option>
-                                    <option value="SUV">SUV</option>
-                                    <option value="Truck">Truck</option>
-                                    <option value="EV">EV</option>
-                                </select>
-                            </div>
-                            <div class="col-md-7">
-                                <label class="form-label">Issue description</label>
-                                <textarea class="form-control form-control-lg" name="issue_type" rows="3" placeholder="Example: Car won't start after smoke from engine bay." required></textarea>
-                            </div>
-                            <div class="col-12">
-                                <label class="form-label">Breakdown location</label>
-                                <div id="serviceMap" class="map-shell"></div>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Latitude</label>
-                                <input type="number" class="form-control form-control-lg" name="latitude" id="latitudeInput" step="0.0001" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Longitude</label>
-                                <input type="number" class="form-control form-control-lg" name="longitude" id="longitudeInput" step="0.0001" required>
-                            </div>
+                    <div class="rescue-map-wrap">
+                        <div id="serviceMap" class="map-shell" aria-label="Select your breakdown location on the map"></div>
+                        <div id="mapStatus" class="map-status"><i class="bi bi-geo-alt-fill"></i> Default location selected</div>
+                    </div>
+
+                    <div class="row g-3 location-fields">
+                        <div class="col-md-6">
+                            <label class="form-label" for="latitudeInput">Latitude</label>
+                            <input type="number" class="form-control form-control-lg" name="latitude" id="latitudeInput" step="0.0001" required>
                         </div>
+                        <div class="col-md-6">
+                            <label class="form-label" for="longitudeInput">Longitude</label>
+                            <input type="number" class="form-control form-control-lg" name="longitude" id="longitudeInput" step="0.0001" required>
+                        </div>
+                    </div>
 
-                        <button type="submit" class="btn btn-premium btn-lg w-100">Send Rescue Request</button>
-                    </form>
-                </div>
+                    <button type="submit" id="submitRescueRequest" class="btn btn-rescue-primary btn-lg w-100 request-submit-button"><i class="bi bi-send-fill"></i> Send rescue request</button>
+                    <p class="form-assurance"><i class="bi bi-shield-lock"></i> Your location is used only to coordinate this rescue request.</p>
+                </form>
             </div>
         </div>
     </div>
@@ -77,18 +109,21 @@
 {% block extra_scripts %}
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-    const delhi = [28.6139, 77.2090];
-    const map = L.map('serviceMap').setView(delhi, 12);
+    const defaultLocation = [28.6139, 77.2090];
+    const map = L.map('serviceMap', { zoomControl: false }).setView(defaultLocation, 12);
     const latitudeInput = document.getElementById('latitudeInput');
     const longitudeInput = document.getElementById('longitudeInput');
+    const mapStatus = document.getElementById('mapStatus');
+    const submitButton = document.getElementById('submitRescueRequest');
     let marker = null;
 
+    L.control.zoom({ position: 'bottomright' }).addTo(map);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
         attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
-    function setLocation(lat, lng) {
+    function setLocation(lat, lng, label = 'Location pinned for rescue') {
         latitudeInput.value = Number(lat).toFixed(4);
         longitudeInput.value = Number(lng).toFixed(4);
 
@@ -97,20 +132,22 @@
         } else {
             marker = L.marker([lat, lng]).addTo(map);
         }
+
+        mapStatus.innerHTML = `<i class="bi bi-geo-alt-fill"></i> ${label}`;
         map.setView([lat, lng], 14);
     }
 
-    setLocation(delhi[0], delhi[1]);
+    setLocation(defaultLocation[0], defaultLocation[1]);
 
     map.on('click', (event) => {
-        setLocation(event.latlng.lat, event.latlng.lng);
+        setLocation(event.latlng.lat, event.latlng.lng, 'Pickup point pinned on the map');
     });
 
     document.getElementById('captureLocation').addEventListener('click', async () => {
         try {
             const coords = await AutoRescue.getCurrentLocation();
-            setLocation(coords.latitude, coords.longitude);
-            AutoRescue.toast('Location updated');
+            setLocation(coords.latitude, coords.longitude, 'Your current location is ready');
+            AutoRescue.toast('Location captured');
         } catch (error) {
             AutoRescue.toast(error.message, 'danger');
         }
@@ -118,6 +155,8 @@
 
     document.getElementById('serviceForm').addEventListener('submit', async (event) => {
         event.preventDefault();
+        const restoreButton = AutoRescue.setButtonLoading(submitButton, 'Sending rescue request…');
+
         try {
             const result = await AutoRescue.submitForm('/request-service', new FormData(event.currentTarget));
             AutoRescue.showAlert('alertBox', result.message, 'success');
@@ -126,6 +165,7 @@
             }, 700);
         } catch (error) {
             AutoRescue.showAlert('alertBox', error.message, 'danger');
+            restoreButton();
         }
     });
 </script>

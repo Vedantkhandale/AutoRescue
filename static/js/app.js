@@ -91,11 +91,27 @@
         }, 2400);
     }
 
+    function setButtonLoading(button, label) {
+        if (!button) {
+            return () => {};
+        }
+
+        const originalContent = button.innerHTML;
+        button.disabled = true;
+        button.innerHTML = `<span class="spinner-border spinner-border-sm" aria-hidden="true"></span>${label}`;
+
+        return () => {
+            button.disabled = false;
+            button.innerHTML = originalContent;
+        };
+    }
+
     window.AutoRescue = {
         showAlert,
         submitForm,
         postJson,
         getCurrentLocation,
         toast,
+        setButtonLoading,
     };
 })();

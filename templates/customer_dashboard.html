@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}Customer Dashboard | AutoRescue{% endblock %}
+{% block body_class %}dashboard-page{% endblock %}
 
 {% block content %}
 <section class="section-space">
@@ -11,34 +12,34 @@
                 <h1>Welcome back, {{ user.name }}.</h1>
                 <p>Track every rescue request, spot pending issues, and request help again in a couple of taps.</p>
             </div>
-            <a href="{{ url_for('request_service') }}" class="btn btn-premium">Request Emergency Help</a>
+            <a href="{{ url_for('request_service') }}" class="btn btn-rescue-primary"><i class="bi bi-lightning-charge-fill"></i> Request emergency help</a>
         </div>
 
         <div class="row g-4">
             <div class="col-md-6 col-xl-3">
-                <div class="dashboard-card stat-surface">
-                    <span class="stat-kicker">Total requests</span>
+                <div class="dashboard-card stat-surface stat-card stat-card-total">
+                    <div class="stat-card-top"><span class="stat-icon"><i class="bi bi-journal-text"></i></span><span class="stat-kicker">Total requests</span></div>
                     <strong>{{ stats.total }}</strong>
                     <p>All rescue requests you've created.</p>
                 </div>
             </div>
             <div class="col-md-6 col-xl-3">
-                <div class="dashboard-card stat-surface">
-                    <span class="stat-kicker">Pending</span>
+                <div class="dashboard-card stat-surface stat-card stat-card-pending">
+                    <div class="stat-card-top"><span class="stat-icon"><i class="bi bi-hourglass-split"></i></span><span class="stat-kicker">Pending</span></div>
                     <strong>{{ stats.pending }}</strong>
                     <p>Waiting for a mechanic to accept.</p>
                 </div>
             </div>
             <div class="col-md-6 col-xl-3">
-                <div class="dashboard-card stat-surface">
-                    <span class="stat-kicker">Accepted</span>
+                <div class="dashboard-card stat-surface stat-card stat-card-accepted">
+                    <div class="stat-card-top"><span class="stat-icon"><i class="bi bi-tools"></i></span><span class="stat-kicker">Accepted</span></div>
                     <strong>{{ stats.accepted }}</strong>
                     <p>Already picked up by a mechanic.</p>
                 </div>
             </div>
             <div class="col-md-6 col-xl-3">
-                <div class="dashboard-card stat-surface">
-                    <span class="stat-kicker">Completed</span>
+                <div class="dashboard-card stat-surface stat-card stat-card-completed">
+                    <div class="stat-card-top"><span class="stat-icon"><i class="bi bi-check2-circle"></i></span><span class="stat-kicker">Completed</span></div>
                     <strong>{{ stats.completed }}</strong>
                     <p>Finished jobs in your history.</p>
                 </div>
@@ -47,7 +48,7 @@
 
         <div class="row g-4 mt-1">
             <div class="col-lg-4">
-                <div class="dashboard-card info-card">
+                <div class="dashboard-card info-card action-panel">
                     <span class="eyebrow">Next best move</span>
                     <h3>{% if stats.pending %}A rescue request is still open.{% else %}You're all clear right now.{% endif %}</h3>
                     <p>{% if stats.pending %}Open the request list to monitor status or create a fresh request if this is a new issue.{% else %}If your vehicle breaks down again, you can send a location-backed rescue request in under a minute.{% endif %}</p>
@@ -59,7 +60,7 @@
             </div>
 
             <div class="col-lg-8">
-                <div class="dashboard-card list-card">
+                <div class="dashboard-card list-card elevated-list-card">
                     <div class="section-inline-header">
                         <div>
                             <span class="eyebrow">Recent activity</span>

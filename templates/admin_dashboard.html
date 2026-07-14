@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}Admin Dashboard | AutoRescue{% endblock %}
+{% block body_class %}dashboard-page{% endblock %}
 
 {% block content %}
 <section class="section-space">
@@ -15,29 +16,29 @@
 
         <div class="row g-4">
             <div class="col-md-6 col-xl-3">
-                <div class="dashboard-card stat-surface">
-                    <span class="stat-kicker">Users</span>
+                <div class="dashboard-card stat-surface stat-card stat-card-total">
+                    <div class="stat-card-top"><span class="stat-icon"><i class="bi bi-people"></i></span><span class="stat-kicker">Users</span></div>
                     <strong>{{ stats.users }}</strong>
                     <p>Total registered accounts.</p>
                 </div>
             </div>
             <div class="col-md-6 col-xl-3">
-                <div class="dashboard-card stat-surface">
-                    <span class="stat-kicker">Mechanics</span>
+                <div class="dashboard-card stat-surface stat-card stat-card-accepted">
+                    <div class="stat-card-top"><span class="stat-icon"><i class="bi bi-tools"></i></span><span class="stat-kicker">Mechanics</span></div>
                     <strong>{{ stats.mechanics }}</strong>
                     <p>Profiles ready to receive jobs.</p>
                 </div>
             </div>
             <div class="col-md-6 col-xl-3">
-                <div class="dashboard-card stat-surface">
-                    <span class="stat-kicker">Pending</span>
+                <div class="dashboard-card stat-surface stat-card stat-card-pending">
+                    <div class="stat-card-top"><span class="stat-icon"><i class="bi bi-hourglass-split"></i></span><span class="stat-kicker">Pending</span></div>
                     <strong>{{ stats.pending }}</strong>
                     <p>Open rescue jobs still in queue.</p>
                 </div>
             </div>
             <div class="col-md-6 col-xl-3">
-                <div class="dashboard-card stat-surface">
-                    <span class="stat-kicker">Completed</span>
+                <div class="dashboard-card stat-surface stat-card stat-card-completed">
+                    <div class="stat-card-top"><span class="stat-icon"><i class="bi bi-check2-circle"></i></span><span class="stat-kicker">Completed</span></div>
                     <strong>{{ stats.completed }}</strong>
                     <p>Closed jobs across the platform.</p>
                 </div>
@@ -46,7 +47,7 @@
 
         <div class="row g-4 mt-1">
             <div class="col-lg-6">
-                <div class="dashboard-card table-card">
+                <div class="dashboard-card table-card elevated-list-card">
                     <div class="section-inline-header">
                         <div>
                             <span class="eyebrow">Recent users</span>
@@ -77,7 +78,7 @@
             </div>
 
             <div class="col-lg-6">
-                <div class="dashboard-card table-card">
+                <div class="dashboard-card table-card elevated-list-card">
                     <div class="section-inline-header">
                         <div>
                             <span class="eyebrow">Recent requests</span>
