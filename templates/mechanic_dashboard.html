@@ -8,11 +8,11 @@
     <div class="container">
         <div class="page-heading">
             <div>
-                <span class="eyebrow">Mechanic operations</span>
+                <span class="eyebrow">Mechanic dispatch</span>
                 <h1>{{ mechanic.shop_name if mechanic else user.name }} dispatch board</h1>
-                <p>{% if mechanic %}{{ mechanic.experience }} years experience &middot; {{ mechanic.availability }} for roadside jobs{% else %}Complete your mechanic profile to improve route accuracy.{% endif %}</p>
+                <p>{% if mechanic %}{{ mechanic.experience }} years experience &middot; {{ mechanic.availability }} for nearby roadside jobs{% else %}Complete your mechanic profile to improve route accuracy.{% endif %}</p>
             </div>
-            <a href="{{ url_for('available_requests') }}" class="btn btn-rescue-primary"><i class="bi bi-broadcast-pin"></i> Browse available requests</a>
+            <a href="{{ url_for('available_requests') }}" class="btn btn-rescue-primary"><i class="bi bi-broadcast-pin"></i> Browse the live queue</a>
         </div>
 
         <div class="row g-4">
@@ -20,28 +20,28 @@
                 <div class="dashboard-card stat-surface stat-card stat-card-pending">
                     <div class="stat-card-top"><span class="stat-icon"><i class="bi bi-broadcast"></i></span><span class="stat-kicker">Pending in network</span></div>
                     <strong>{{ stats.pending }}</strong>
-                    <p>Open requests customers are waiting on.</p>
+                    <p>Open requests customers need help with.</p>
                 </div>
             </div>
             <div class="col-md-6 col-xl-3">
                 <div class="dashboard-card stat-surface stat-card stat-card-accepted">
                     <div class="stat-card-top"><span class="stat-icon"><i class="bi bi-clipboard2-check"></i></span><span class="stat-kicker">Accepted overall</span></div>
                     <strong>{{ stats.accepted }}</strong>
-                    <p>Requests already picked by the team.</p>
+                    <p>Requests already claimed by the team.</p>
                 </div>
             </div>
             <div class="col-md-6 col-xl-3">
                 <div class="dashboard-card stat-surface stat-card stat-card-completed">
                     <div class="stat-card-top"><span class="stat-icon"><i class="bi bi-check2-circle"></i></span><span class="stat-kicker">Completed overall</span></div>
                     <strong>{{ stats.completed }}</strong>
-                    <p>Finished rescue jobs on the platform.</p>
+                    <p>Finished rescue jobs across the network.</p>
                 </div>
             </div>
             <div class="col-md-6 col-xl-3">
                 <div class="dashboard-card stat-surface stat-card stat-card-rating">
                     <div class="stat-card-top"><span class="stat-icon"><i class="bi bi-star-fill"></i></span><span class="stat-kicker">Rating</span></div>
                     <strong>{{ mechanic.rating if mechanic else 4.8 }}</strong>
-                    <p>Trust signal customers care about.</p>
+                    <p>The trust signal customers see first.</p>
                 </div>
             </div>
         </div>
@@ -49,10 +49,10 @@
         <div class="row g-4 mt-1">
             <div class="col-lg-4">
                 <div class="dashboard-card info-card action-panel">
-                    <span class="eyebrow">Coverage</span>
+                    <span class="eyebrow">Your coverage</span>
                     <h3>{% if mechanic %}Service radius anchored to your saved location.{% else %}Location missing for precise matching.{% endif %}</h3>
                     <p>{% if mechanic %}Saved coordinates: {{ mechanic.latitude|round(4) }}, {{ mechanic.longitude|round(4) }}. Nearby requests are sorted with distance context where possible.{% else %}Ask an admin to seed your mechanic profile or register a fresh mechanic account with location info.{% endif %}</p>
-                    <a href="{{ url_for('view_requests') }}" class="btn btn-soft">Open All Requests</a>
+                    <a href="{{ url_for('view_requests') }}" class="btn btn-soft">Open all requests</a>
                 </div>
             </div>
 
@@ -61,7 +61,7 @@
                     <div class="section-inline-header">
                         <div>
                             <span class="eyebrow">Hot queue</span>
-                            <h3>Requests you can pick up now</h3>
+                            <h3>Requests you can take now</h3>
                         </div>
                     </div>
 
@@ -81,7 +81,7 @@
                                 <span><i class="bi bi-clock"></i> {{ request.created_label }}</span>
                                 <span><i class="bi bi-person"></i> {{ request.customer_name or 'Customer' }}</span>
                             </div>
-                            <button class="btn btn-premium w-100 mt-3" data-accept-request data-request-id="{{ request.id }}">Accept Request</button>
+                            <button class="btn btn-premium w-100 mt-3" data-accept-request data-request-id="{{ request.id }}"><i class="bi bi-check2-circle"></i> Take this request</button>
                         </article>
                         {% endfor %}
                     </div>
@@ -105,7 +105,7 @@
 <script>
     document.querySelectorAll('[data-accept-request]').forEach((button) => {
         button.addEventListener('click', async () => {
-            const restoreButton = AutoRescue.setButtonLoading(button, 'Accepting request…');
+            const restoreButton = AutoRescue.setButtonLoading(button, 'Taking request...');
             try {
                 const result = await AutoRescue.postJson('/accept-request', { id: button.dataset.requestId });
                 AutoRescue.toast(result.message);

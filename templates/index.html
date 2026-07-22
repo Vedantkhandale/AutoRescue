@@ -10,11 +10,11 @@
             <div class="rescue-hero-copy">
                 <div class="availability-badge">
                     <span class="availability-dot"></span>
-                    24/7 roadside assistance is online
+                    24/7 rescue network is online
                 </div>
 
-                <h1>Stranded on the road?<br><span>We’ll get you moving.</span></h1>
-                <p>Share your location, explain the issue, and connect with a nearby mechanic—without the stress, endless calls, or guesswork.</p>
+                <h1>Stranded on the road?<br><span>We will get you moving.</span></h1>
+                <p>Tell us what happened, pin your location, and get connected to a nearby mechanic without the panic or endless phone calls.</p>
 
                 <div class="hero-action-group">
                     {% if session.get('user_role') == 'customer' %}
@@ -47,7 +47,7 @@
                     <div class="avatar-stack" aria-hidden="true">
                         <span>RK</span><span>SN</span><span>AM</span>
                     </div>
-                    <p><strong>Always ready to respond</strong><br>Built for drivers, local mechanics, and operators.</p>
+                    <p><strong>Help stays within reach</strong><br>One clear flow for drivers, mechanics, and operators.</p>
                 </div>
             </div>
 
@@ -62,7 +62,7 @@
                     <div class="dispatch-panel-head">
                         <div>
                             <span class="panel-overline">Live dispatch</span>
-                            <strong>Help is being matched</strong>
+                            <strong>Matching your nearest help</strong>
                         </div>
                         <span class="panel-live"><i class="bi bi-broadcast"></i> Live</span>
                     </div>
@@ -79,14 +79,14 @@
                         <span class="status-icon"><i class="bi bi-shield-check"></i></span>
                         <div>
                             <strong>Location shared safely</strong>
-                            <span>Matching the nearest available pro</span>
+                            <span>Finding the closest available pro</span>
                         </div>
                         <i class="bi bi-chevron-right"></i>
                     </div>
                 </div>
 
-                <div class="floating-chip chip-eta"><i class="bi bi-clock-history"></i><span>Average response<br><strong>under 20 min</strong></span></div>
-                <div class="floating-chip chip-signal"><span class="mini-signal"></span> Rescue network active</div>
+                <div class="floating-chip chip-eta"><i class="bi bi-clock-history"></i><span>Typical response<br><strong>under 20 min</strong></span></div>
+                <div class="floating-chip chip-signal"><span class="mini-signal"></span> Network is active</div>
             </div>
         </div>
     </div>
@@ -95,10 +95,10 @@
 <section class="confidence-strip">
     <div class="container">
         <div class="confidence-grid">
-            <div><i class="bi bi-geo-alt"></i><span>Location-backed<br><strong>rescue requests</strong></span></div>
-            <div><i class="bi bi-person-check"></i><span>Dedicated portals for<br><strong>drivers & mechanics</strong></span></div>
-            <div><i class="bi bi-clipboard2-check"></i><span>Live request status<br><strong>from open to resolved</strong></span></div>
-            <div><i class="bi bi-shield-lock"></i><span>Role-based access<br><strong>for every account</strong></span></div>
+            <div><i class="bi bi-geo-alt"></i><span>Pin your exact<br><strong>pickup point</strong></span></div>
+            <div><i class="bi bi-person-check"></i><span>Connect with a<br><strong>nearby pro</strong></span></div>
+            <div><i class="bi bi-clipboard2-check"></i><span>See every request<br><strong>move forward</strong></span></div>
+            <div><i class="bi bi-shield-lock"></i><span>Keep your details<br><strong>protected</strong></span></div>
         </div>
     </div>
 </section>
@@ -107,10 +107,10 @@
     <div class="container">
         <div class="rescue-section-heading">
             <div>
-                <span class="eyebrow eyebrow-rescue">One platform. Three clear roles.</span>
-                <h2>Roadside help that feels calm, not chaotic.</h2>
+                <span class="eyebrow eyebrow-rescue">One network. Every roadside moment.</span>
+                <h2>When things go wrong, the next step stays clear.</h2>
             </div>
-            <p>AutoRescue keeps the important parts simple: drivers get help, mechanics see work nearby, and operators always know what’s happening.</p>
+            <p>AutoRescue keeps the important parts simple: drivers get help, mechanics find nearby work, and operators see the full picture.</p>
         </div>
 
         <div class="role-feature-grid">
@@ -118,22 +118,22 @@
                 <div class="role-card-icon"><i class="bi bi-car-front-fill"></i></div>
                 <span class="role-card-number">01</span>
                 <h3>For drivers</h3>
-                <p>Send a rescue request in minutes with your vehicle details and exact breakdown location.</p>
-                <a href="{{ url_for('register', role='customer') }}">Get help <i class="bi bi-arrow-up-right"></i></a>
+                <p>Share the essentials in under a minute and give your mechanic a precise place to start.</p>
+                <a href="{{ url_for('register', role='customer') }}">Start a request <i class="bi bi-arrow-up-right"></i></a>
             </article>
             <article class="role-feature-card role-feature-mechanic">
                 <div class="role-card-icon"><i class="bi bi-tools"></i></div>
                 <span class="role-card-number">02</span>
                 <h3>For mechanics</h3>
-                <p>See open jobs, understand distance, and accept the requests that fit your service area.</p>
+                <p>See nearby jobs with the right context, then take the ones that fit your route and skills.</p>
                 <a href="{{ url_for('register', role='mechanic') }}">Join the network <i class="bi bi-arrow-up-right"></i></a>
             </article>
             <article class="role-feature-card role-feature-operator">
                 <div class="role-card-icon"><i class="bi bi-grid-1x2-fill"></i></div>
                 <span class="role-card-number">03</span>
                 <h3>For operators</h3>
-                <p>Monitor people, mechanics, requests, and completed jobs from one focused dashboard.</p>
-                <a href="{{ url_for('login') }}">Open dashboard <i class="bi bi-arrow-up-right"></i></a>
+                <p>Keep users, mechanics, demand, and completed work visible from one focused command center.</p>
+                <a href="{{ url_for('login') }}">Open command center <i class="bi bi-arrow-up-right"></i></a>
             </article>
         </div>
     </div>
@@ -144,29 +144,29 @@
         <div class="how-it-works-layout">
             <div class="how-it-works-copy">
                 <span class="eyebrow eyebrow-rescue">How it works</span>
-                <h2>From breakdown to backup in three simple steps.</h2>
-                <p>No complicated flow. Just the information a mechanic needs to start helping you.</p>
+                <h2>From breakdown to backup in three steady steps.</h2>
+                <p>No complicated flow. Just the details a mechanic needs to reach you prepared.</p>
                 <div class="rescue-stat-row">
                     <div><strong>{{ stats.mechanics }}</strong><span>mechanics in<br>the network</span></div>
                     <div><strong>{{ stats.requests }}</strong><span>rescue requests<br>logged</span></div>
-                    <div><strong>{{ stats.resolved }}</strong><span>requests<br>progressed</span></div>
+                    <div><strong>{{ stats.resolved }}</strong><span>requests<br>moving forward</span></div>
                 </div>
             </div>
 
             <ol class="rescue-steps">
                 <li>
                     <span class="step-number">01</span>
-                    <div><h3>Tell us what happened</h3><p>Add your vehicle type and a clear description of the issue.</p></div>
+                    <div><h3>Tell us what happened</h3><p>Choose your vehicle and describe the issue in plain words.</p></div>
                     <i class="bi bi-chat-left-text"></i>
                 </li>
                 <li>
                     <span class="step-number">02</span>
-                    <div><h3>Pin your exact location</h3><p>Use the map or your device location so help knows where to go.</p></div>
+                    <div><h3>Pin your exact location</h3><p>Drop a pin or share your device location so help knows where to go.</p></div>
                     <i class="bi bi-geo-alt"></i>
                 </li>
                 <li>
                     <span class="step-number">03</span>
-                    <div><h3>Track the rescue</h3><p>Follow your request as it moves from pending to accepted and completed.</p></div>
+                    <div><h3>Track the rescue</h3><p>Follow the request from waiting to accepted and, finally, resolved.</p></div>
                     <i class="bi bi-check2-circle"></i>
                 </li>
             </ol>
@@ -180,12 +180,12 @@
             <div class="cta-orbit cta-orbit-one" aria-hidden="true"></div>
             <div class="cta-orbit cta-orbit-two" aria-hidden="true"></div>
             <div class="cta-content">
-                <span class="eyebrow eyebrow-light">Ready when the road isn’t.</span>
-                <h2>Need a hand? Start your rescue request now.</h2>
-                <p>Get your account set up today so help is only a few taps away when you need it.</p>
+                <span class="eyebrow eyebrow-light">Ready for the unexpected.</span>
+                <h2>Make your next roadside moment easier.</h2>
+                <p>Create your account now so a clear path to help is already waiting when you need it.</p>
                 <div class="hero-action-group">
                     <a href="{{ url_for('register', role='customer') }}" class="btn btn-cta-light btn-lg"><i class="bi bi-lightning-charge-fill"></i> Create driver account</a>
-                    <a href="{{ url_for('register', role='mechanic') }}" class="btn btn-cta-outline btn-lg">Become a mechanic</a>
+                    <a href="{{ url_for('register', role='mechanic') }}" class="btn btn-cta-outline btn-lg">Join as a mechanic</a>
                 </div>
             </div>
             <div class="cta-art" aria-hidden="true">

@@ -10,17 +10,17 @@
             <div class="col-lg-5">
                 <div class="auth-aside">
                     <span class="eyebrow">Create account</span>
-                    <h1>Bring customers and mechanics into one rescue network.</h1>
-                    <p>Customer signup stays quick. Mechanic signup collects the shop and service location needed for usable dispatching.</p>
-                    <button type="button" class="btn btn-soft mt-3" id="useMyLocation">Use My Current Location</button>
+                    <h1>Build your place in the rescue network.</h1>
+                    <p>Drivers get a fast path to help. Mechanics get useful work nearby. Pick the role that fits you.</p>
+                    <button type="button" class="btn btn-soft mt-3" id="useMyLocation"><i class="bi bi-crosshair"></i> Use current location</button>
                 </div>
             </div>
 
             <div class="col-lg-7">
                 <div class="auth-card">
                     <div class="card-header-clean">
-                        <h2>Register</h2>
-                        <p>Pick your role and fill in the details below.</p>
+                        <h2>Create your account</h2>
+                        <p>Choose your role, then add the details we need.</p>
                     </div>
 
                     <div id="alertBox"></div>
@@ -30,7 +30,7 @@
                             <input type="radio" class="btn-check" name="role" id="roleCustomer" value="customer" {% if selected_role != 'mechanic' %}checked{% endif %}>
                             <label class="role-card" for="roleCustomer">
                                 <i class="bi bi-person-badge"></i>
-                                <span>Customer</span>
+                                <span>Driver</span>
                             </label>
 
                             <input type="radio" class="btn-check" name="role" id="roleMechanic" value="mechanic" {% if selected_role == 'mechanic' %}checked{% endif %}>
@@ -82,10 +82,10 @@
                                     <input type="number" class="form-control form-control-lg" name="longitude" step="0.0001" placeholder="77.2090">
                                 </div>
                             </div>
-                            <p class="helper-copy mt-3 mb-0">Mechanic accounts need a service location so nearby rescue jobs can be prioritized correctly.</p>
+                            <p class="helper-copy mt-3 mb-0">Your service location helps nearby rescue jobs find the right mechanic.</p>
                         </div>
 
-                        <button type="submit" class="btn btn-premium btn-lg w-100">Create Account</button>
+                        <button type="submit" class="btn btn-premium btn-lg w-100"><i class="bi bi-person-plus-fill"></i> Create my account</button>
                     </form>
 
                     <p class="auth-footer">Already registered? <a href="{{ url_for('login') }}">Login here</a></p>

@@ -10,9 +10,9 @@
             <div>
                 <span class="eyebrow">Live queue</span>
                 <h1>Available roadside rescue requests</h1>
-                <p>{% if mechanic %}Distance hints are calculated from {{ mechanic.shop_name }} when possible.{% else %}Pick requests from the live network queue.{% endif %}</p>
+                <p>{% if mechanic %}Requests are sorted with distance from {{ mechanic.shop_name }} when possible.{% else %}Pick up a request from the live network queue.{% endif %}</p>
             </div>
-            <a href="{{ url_for('mechanic_dashboard') }}" class="btn btn-soft">Back to Dashboard</a>
+            <a href="{{ url_for('mechanic_dashboard') }}" class="btn btn-soft"><i class="bi bi-arrow-left"></i> Back to dispatch board</a>
         </div>
 
         {% if requests %}
@@ -34,7 +34,7 @@
                     <span><i class="bi bi-telephone"></i> {{ request.customer_mobile }}</span>
                     {% endif %}
                 </div>
-                <button class="btn btn-premium w-100 mt-3" data-accept-request data-request-id="{{ request.id }}">Accept Request</button>
+                <button class="btn btn-premium w-100 mt-3" data-accept-request data-request-id="{{ request.id }}"><i class="bi bi-check2-circle"></i> Take this request</button>
             </article>
             {% endfor %}
         </div>
@@ -42,7 +42,7 @@
         <div class="empty-state">
             <i class="bi bi-check2-circle"></i>
             <h3>All caught up</h3>
-            <p>There are no pending service requests in the queue.</p>
+            <p>The live queue is clear for now. Check back soon.</p>
         </div>
         {% endif %}
     </div>
@@ -53,7 +53,7 @@
 <script>
     document.querySelectorAll('[data-accept-request]').forEach((button) => {
         button.addEventListener('click', async () => {
-            const restoreButton = AutoRescue.setButtonLoading(button, 'Accepting request…');
+            const restoreButton = AutoRescue.setButtonLoading(button, 'Taking request...');
             try {
                 const result = await AutoRescue.postJson('/accept-request', { id: button.dataset.requestId });
                 AutoRescue.toast(result.message);

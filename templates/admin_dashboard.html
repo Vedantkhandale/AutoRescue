@@ -8,9 +8,9 @@
     <div class="container">
         <div class="page-heading">
             <div>
-                <span class="eyebrow">Operations command</span>
-                <h1>Admin control center</h1>
-                <p>One place to monitor users, mechanics, and rescue load without placeholder cards or dead routes.</p>
+                <span class="eyebrow">Network operations</span>
+                <h1>Admin command center</h1>
+                <p>See the people, supply, and rescue demand moving through AutoRescue right now.</p>
             </div>
         </div>
 
@@ -19,28 +19,28 @@
                 <div class="dashboard-card stat-surface stat-card stat-card-total">
                     <div class="stat-card-top"><span class="stat-icon"><i class="bi bi-people"></i></span><span class="stat-kicker">Users</span></div>
                     <strong>{{ stats.users }}</strong>
-                    <p>Total registered accounts.</p>
+                    <p>Registered accounts across the network.</p>
                 </div>
             </div>
             <div class="col-md-6 col-xl-3">
                 <div class="dashboard-card stat-surface stat-card stat-card-accepted">
                     <div class="stat-card-top"><span class="stat-icon"><i class="bi bi-tools"></i></span><span class="stat-kicker">Mechanics</span></div>
                     <strong>{{ stats.mechanics }}</strong>
-                    <p>Profiles ready to receive jobs.</p>
+                    <p>Profiles ready to take nearby jobs.</p>
                 </div>
             </div>
             <div class="col-md-6 col-xl-3">
                 <div class="dashboard-card stat-surface stat-card stat-card-pending">
                     <div class="stat-card-top"><span class="stat-icon"><i class="bi bi-hourglass-split"></i></span><span class="stat-kicker">Pending</span></div>
                     <strong>{{ stats.pending }}</strong>
-                    <p>Open rescue jobs still in queue.</p>
+                    <p>Open rescues still waiting in queue.</p>
                 </div>
             </div>
             <div class="col-md-6 col-xl-3">
                 <div class="dashboard-card stat-surface stat-card stat-card-completed">
                     <div class="stat-card-top"><span class="stat-icon"><i class="bi bi-check2-circle"></i></span><span class="stat-kicker">Completed</span></div>
                     <strong>{{ stats.completed }}</strong>
-                    <p>Closed jobs across the platform.</p>
+                    <p>Rescues closed across the platform.</p>
                 </div>
             </div>
         </div>
@@ -51,7 +51,7 @@
                     <div class="section-inline-header">
                         <div>
                             <span class="eyebrow">Recent users</span>
-                            <h3>Latest registrations</h3>
+                            <h3>Latest people to join</h3>
                         </div>
                     </div>
                     <div class="table-responsive">
@@ -82,7 +82,7 @@
                     <div class="section-inline-header">
                         <div>
                             <span class="eyebrow">Recent requests</span>
-                            <h3>Latest service demand</h3>
+                            <h3>Latest roadside demand</h3>
                         </div>
                     </div>
                     <div class="table-responsive">

@@ -8,11 +8,11 @@
     <div class="container">
         <div class="page-heading">
             <div>
-                <span class="eyebrow">Customer cockpit</span>
-                <h1>Welcome back, {{ user.name }}.</h1>
-                <p>Track every rescue request, spot pending issues, and request help again in a couple of taps.</p>
+                <span class="eyebrow">Driver dashboard</span>
+                <h1>Good to see you, {{ user.name }}.</h1>
+                <p>Keep an eye on every request, see what needs attention, and get help again without starting from scratch.</p>
             </div>
-            <a href="{{ url_for('request_service') }}" class="btn btn-rescue-primary"><i class="bi bi-lightning-charge-fill"></i> Request emergency help</a>
+            <a href="{{ url_for('request_service') }}" class="btn btn-rescue-primary"><i class="bi bi-lightning-charge-fill"></i> Request roadside help</a>
         </div>
 
         <div class="row g-4">
@@ -20,28 +20,28 @@
                 <div class="dashboard-card stat-surface stat-card stat-card-total">
                     <div class="stat-card-top"><span class="stat-icon"><i class="bi bi-journal-text"></i></span><span class="stat-kicker">Total requests</span></div>
                     <strong>{{ stats.total }}</strong>
-                    <p>All rescue requests you've created.</p>
+                    <p>Every rescue request you have created.</p>
                 </div>
             </div>
             <div class="col-md-6 col-xl-3">
                 <div class="dashboard-card stat-surface stat-card stat-card-pending">
                     <div class="stat-card-top"><span class="stat-icon"><i class="bi bi-hourglass-split"></i></span><span class="stat-kicker">Pending</span></div>
                     <strong>{{ stats.pending }}</strong>
-                    <p>Waiting for a mechanic to accept.</p>
+                    <p>Waiting for a nearby mechanic.</p>
                 </div>
             </div>
             <div class="col-md-6 col-xl-3">
                 <div class="dashboard-card stat-surface stat-card stat-card-accepted">
                     <div class="stat-card-top"><span class="stat-icon"><i class="bi bi-tools"></i></span><span class="stat-kicker">Accepted</span></div>
                     <strong>{{ stats.accepted }}</strong>
-                    <p>Already picked up by a mechanic.</p>
+                    <p>Picked up by a mechanic.</p>
                 </div>
             </div>
             <div class="col-md-6 col-xl-3">
                 <div class="dashboard-card stat-surface stat-card stat-card-completed">
                     <div class="stat-card-top"><span class="stat-icon"><i class="bi bi-check2-circle"></i></span><span class="stat-kicker">Completed</span></div>
                     <strong>{{ stats.completed }}</strong>
-                    <p>Finished jobs in your history.</p>
+                    <p>Finished rescues in your history.</p>
                 </div>
             </div>
         </div>
@@ -49,12 +49,12 @@
         <div class="row g-4 mt-1">
             <div class="col-lg-4">
                 <div class="dashboard-card info-card action-panel">
-                    <span class="eyebrow">Next best move</span>
-                    <h3>{% if stats.pending %}A rescue request is still open.{% else %}You're all clear right now.{% endif %}</h3>
-                    <p>{% if stats.pending %}Open the request list to monitor status or create a fresh request if this is a new issue.{% else %}If your vehicle breaks down again, you can send a location-backed rescue request in under a minute.{% endif %}</p>
+                    <span class="eyebrow">Your next move</span>
+                    <h3>{% if stats.pending %}Your rescue request is still open.{% else %}You are all clear right now.{% endif %}</h3>
+                    <p>{% if stats.pending %}Check its latest status or create a fresh request if this is a new issue.{% else %}If something changes on the road, you can send a location-backed request in under a minute.{% endif %}</p>
                     <div class="d-flex gap-3 flex-wrap">
-                        <a href="{{ url_for('view_requests') }}" class="btn btn-soft">View Request History</a>
-                        <a href="{{ url_for('request_service') }}" class="btn btn-ghost">Create New Request</a>
+                        <a href="{{ url_for('view_requests') }}" class="btn btn-soft">View request history</a>
+                        <a href="{{ url_for('request_service') }}" class="btn btn-ghost">Create new request</a>
                     </div>
                 </div>
             </div>
@@ -64,7 +64,7 @@
                     <div class="section-inline-header">
                         <div>
                             <span class="eyebrow">Recent activity</span>
-                            <h3>Your latest rescue requests</h3>
+                            <h3>Your latest requests</h3>
                         </div>
                         <a href="{{ url_for('view_requests') }}" class="text-link">Open full list</a>
                     </div>

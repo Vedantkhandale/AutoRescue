@@ -12,16 +12,16 @@
         <div class="collapse navbar-collapse" id="topNav">
             <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
                 <li class="nav-item">
-                    <a class="nav-link {% if request.endpoint == 'home' %}active{% endif %}" href="{{ url_for('home') }}">Home</a>
+                    <a class="nav-link {% if request.endpoint == 'home' %}active{% endif %}" href="{{ url_for('home') }}">Overview</a>
                 </li>
                 {% if session.get('user_id') %}
                 <li class="nav-item">
                     {% if session.get('user_role') == 'customer' %}
-                    <a class="nav-link {% if request.endpoint == 'customer_dashboard' %}active{% endif %}" href="{{ url_for('customer_dashboard') }}">Dashboard</a>
+                    <a class="nav-link {% if request.endpoint == 'customer_dashboard' %}active{% endif %}" href="{{ url_for('customer_dashboard') }}">My dashboard</a>
                     {% elif session.get('user_role') == 'mechanic' %}
-                    <a class="nav-link {% if request.endpoint in ['mechanic_dashboard', 'available_requests'] %}active{% endif %}" href="{{ url_for('mechanic_dashboard') }}">Dashboard</a>
+                    <a class="nav-link {% if request.endpoint in ['mechanic_dashboard', 'available_requests'] %}active{% endif %}" href="{{ url_for('mechanic_dashboard') }}">Dispatch board</a>
                     {% elif session.get('user_role') == 'admin' %}
-                    <a class="nav-link {% if request.endpoint == 'admin_dashboard' %}active{% endif %}" href="{{ url_for('admin_dashboard') }}">Dashboard</a>
+                    <a class="nav-link {% if request.endpoint == 'admin_dashboard' %}active{% endif %}" href="{{ url_for('admin_dashboard') }}">Command center</a>
                     {% endif %}
                 </li>
                 <li class="nav-item">
@@ -31,10 +31,10 @@
                 <li class="nav-item"><a class="btn btn-ghost nav-logout" href="{{ url_for('logout') }}">Logout</a></li>
                 {% else %}
                 <li class="nav-item">
-                    <a class="nav-link {% if request.endpoint == 'register' and request.args.get('role', 'customer') != 'mechanic' %}active{% endif %}" href="{{ url_for('register', role='customer') }}">Get Help</a>
+                    <a class="nav-link {% if request.endpoint == 'register' and request.args.get('role', 'customer') != 'mechanic' %}active{% endif %}" href="{{ url_for('register', role='customer') }}">Get roadside help</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {% if request.endpoint == 'register' and request.args.get('role') == 'mechanic' %}active{% endif %}" href="{{ url_for('register', role='mechanic') }}">Join as Mechanic</a>
+                    <a class="nav-link {% if request.endpoint == 'register' and request.args.get('role') == 'mechanic' %}active{% endif %}" href="{{ url_for('register', role='mechanic') }}">For mechanics</a>
                 </li>
                 <li class="nav-item"><a class="btn btn-ghost nav-logout" href="{{ url_for('login') }}">Login</a></li>
                 {% endif %}

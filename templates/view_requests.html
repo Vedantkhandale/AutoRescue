@@ -8,12 +8,12 @@
     <div class="container">
         <div class="page-heading">
             <div>
-                <span class="eyebrow">Request ledger</span>
-                <h1>{% if user.role == 'customer' %}Your service requests{% else %}Platform service requests{% endif %}</h1>
-                <p>{% if can_accept %}Mechanics can accept pending requests directly from this screen.{% else %}Track status, timestamps, and exact coordinates for every request.{% endif %}</p>
+                <span class="eyebrow">Request history</span>
+                <h1>{% if user.role == 'customer' %}Your rescue requests{% else %}All rescue requests{% endif %}</h1>
+                <p>{% if can_accept %}Review the queue and take pending requests directly from this screen.{% else %}Track status, timestamps, and the pinned location for every request.{% endif %}</p>
             </div>
             {% if user.role == 'customer' %}
-            <a href="{{ url_for('request_service') }}" class="btn btn-rescue-primary"><i class="bi bi-plus-lg"></i> Create request</a>
+            <a href="{{ url_for('request_service') }}" class="btn btn-rescue-primary"><i class="bi bi-plus-lg"></i> Start a new request</a>
             {% endif %}
         </div>
 
@@ -33,9 +33,9 @@
                     <span><i class="bi bi-clock"></i> {{ request.created_at.strftime('%d %b %Y, %I:%M %p') if request.created_at else 'N/A' }}</span>
                 </div>
                 {% if can_accept and request.status == 'Pending' %}
-                <button class="btn btn-premium w-100 mt-3" data-accept-request data-request-id="{{ request.id }}">Accept Request</button>
+                <button class="btn btn-premium w-100 mt-3" data-accept-request data-request-id="{{ request.id }}"><i class="bi bi-check2-circle"></i> Take this request</button>
                 {% else %}
-                <button class="btn btn-ghost w-100 mt-3" disabled>Status: {{ request.status }}</button>
+                <button class="btn btn-ghost w-100 mt-3" disabled><i class="bi bi-activity"></i> Status: {{ request.status }}</button>
                 {% endif %}
             </article>
             {% endfor %}
@@ -44,7 +44,7 @@
         <div class="empty-state">
             <i class="bi bi-journal-x"></i>
             <h3>No requests found</h3>
-            <p>Once requests are created, they will show up here.</p>
+            <p>Your next request will appear here with its latest status.</p>
         </div>
         {% endif %}
     </div>
@@ -56,7 +56,7 @@
 <script>
     document.querySelectorAll('[data-accept-request]').forEach((button) => {
         button.addEventListener('click', async () => {
-            const restoreButton = AutoRescue.setButtonLoading(button, 'Accepting request…');
+            const restoreButton = AutoRescue.setButtonLoading(button, 'Taking request...');
             try {
                 const result = await AutoRescue.postJson('/accept-request', { id: button.dataset.requestId });
                 AutoRescue.toast(result.message);

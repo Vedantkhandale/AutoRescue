@@ -13,8 +13,8 @@
         <div class="request-page-heading">
             <div>
                 <span class="eyebrow eyebrow-rescue"><i class="bi bi-life-preserver"></i> Roadside rescue</span>
-                <h1>Let’s get you safely back on the road.</h1>
-                <p>Share a few details and your live location. A nearby mechanic can then see exactly what help you need.</p>
+                <h1>Let us get you safely back on the road.</h1>
+                <p>Share the essentials and your live location. A nearby mechanic can then arrive with the right context.</p>
             </div>
             <div class="request-heading-status"><span class="availability-dot"></span> Rescue network online</div>
         </div>
@@ -23,20 +23,20 @@
             <aside class="rescue-guidance-card">
                 <div class="guidance-card-top">
                     <span class="guidance-icon"><i class="bi bi-lightning-charge-fill"></i></span>
-                    <span>Fast emergency intake</span>
+                    <span>Quick roadside intake</span>
                 </div>
-                <h2>Three details. One clear rescue request.</h2>
-                <p>Your request is shared only with the people who need it to help you.</p>
+                <h2>Three details. One clear route to help.</h2>
+                <p>Only the details needed to coordinate your rescue are shared with the response team.</p>
 
                 <div class="guidance-steps">
-                    <div><span>1</span><p><strong>Describe the issue</strong> so the mechanic comes prepared.</p></div>
-                    <div><span>2</span><p><strong>Confirm your location</strong> using the map or GPS.</p></div>
-                    <div><span>3</span><p><strong>Send the request</strong> and track it from your dashboard.</p></div>
+                    <div><span>1</span><p><strong>Describe the issue</strong> so the mechanic knows what to bring.</p></div>
+                    <div><span>2</span><p><strong>Confirm your location</strong> with the map or your device GPS.</p></div>
+                    <div><span>3</span><p><strong>Send the request</strong> and watch its status from your dashboard.</p></div>
                 </div>
 
                 <div class="guidance-tip">
                     <i class="bi bi-info-circle"></i>
-                    <p><strong>Quick tip</strong> Choose a safe spot and add details like smoke, tyre damage, or a no-start issue.</p>
+                    <p><strong>Quick tip</strong> Stay somewhere safe and mention smoke, tyre damage, warning lights, or a no-start issue.</p>
                 </div>
             </aside>
 
@@ -44,8 +44,8 @@
                 <div class="form-card-heading">
                     <div>
                         <span class="form-step-label">Step 1 of 1</span>
-                        <h2>Request a mechanic</h2>
-                        <p>Everything marked below helps us route the right help.</p>
+                        <h2>Tell us what happened</h2>
+                        <p>A little context helps the right mechanic reach you faster.</p>
                     </div>
                     <span class="form-lock"><i class="bi bi-shield-check"></i> Protected</span>
                 </div>
@@ -55,13 +55,13 @@
                 <form id="serviceForm" class="rescue-service-form">
                     <div class="form-section-heading">
                         <span><i class="bi bi-car-front"></i></span>
-                        <div><strong>Vehicle & issue</strong><small>Help the mechanic understand the situation.</small></div>
+                        <div><strong>Vehicle and issue</strong><small>Give the mechanic a useful first read.</small></div>
                     </div>
                     <div class="row g-3">
                         <div class="col-md-5">
                             <label class="form-label" for="vehicleType">Vehicle type</label>
                             <select id="vehicleType" class="form-select form-select-lg" name="vehicle_type" required>
-                                <option value="">Choose vehicle</option>
+                                <option value="">Select vehicle type</option>
                                 <option value="Bike">Bike</option>
                                 <option value="Car">Car</option>
                                 <option value="SUV">SUV</option>
@@ -77,7 +77,7 @@
 
                     <div class="form-section-heading form-section-location">
                         <span><i class="bi bi-geo-alt"></i></span>
-                        <div><strong>Breakdown location</strong><small>Tap the map or use your device location for the exact pickup point.</small></div>
+                        <div><strong>Where are you stranded?</strong><small>Tap the map or use your device location for the exact pickup point.</small></div>
                         <button type="button" id="captureLocation" class="btn btn-location"><i class="bi bi-crosshair"></i> Use my location</button>
                     </div>
 
@@ -97,8 +97,8 @@
                         </div>
                     </div>
 
-                    <button type="submit" id="submitRescueRequest" class="btn btn-rescue-primary btn-lg w-100 request-submit-button"><i class="bi bi-send-fill"></i> Send rescue request</button>
-                    <p class="form-assurance"><i class="bi bi-shield-lock"></i> Your location is used only to coordinate this rescue request.</p>
+                    <button type="submit" id="submitRescueRequest" class="btn btn-rescue-primary btn-lg w-100 request-submit-button"><i class="bi bi-send-fill"></i> Find me roadside help</button>
+                    <p class="form-assurance"><i class="bi bi-shield-lock"></i> Your location is used only to coordinate this request.</p>
                 </form>
             </div>
         </div>
@@ -155,7 +155,7 @@
 
     document.getElementById('serviceForm').addEventListener('submit', async (event) => {
         event.preventDefault();
-        const restoreButton = AutoRescue.setButtonLoading(submitButton, 'Sending rescue request…');
+        const restoreButton = AutoRescue.setButtonLoading(submitButton, 'Sending request...');
 
         try {
             const result = await AutoRescue.submitForm('/request-service', new FormData(event.currentTarget));
