@@ -49,14 +49,34 @@
                     </div>
                     <p><strong>Help stays within reach</strong><br>One clear flow for drivers, mechanics, and operators.</p>
                 </div>
+
+                <div class="hero-command-strip" aria-label="AutoRescue platform highlights">
+                    <div><span>Queue</span><strong>{{ stats.requests }}</strong></div>
+                    <div><span>Network</span><strong>{{ stats.mechanics }}</strong></div>
+                    <div><span>Resolved</span><strong>{{ stats.resolved }}</strong></div>
+                </div>
             </div>
 
             <div class="rescue-hero-visual" aria-label="AutoRescue live dispatch preview">
+                <div class="visual-statusbar">
+                    <span><i class="bi bi-command"></i> AutoRescue OS</span>
+                    <span>Case AR-204</span>
+                </div>
                 <div class="map-grid" aria-hidden="true"></div>
+                <div class="scan-beam" aria-hidden="true"></div>
                 <div class="route route-main" aria-hidden="true"></div>
                 <div class="route route-alt" aria-hidden="true"></div>
+                <div class="route-progress" aria-hidden="true"><span></span></div>
                 <div class="map-pin pin-customer"><i class="bi bi-car-front-fill"></i></div>
                 <div class="map-pin pin-mechanic"><i class="bi bi-tools"></i></div>
+
+                <div class="rescue-unit-card">
+                    <span class="unit-icon"><i class="bi bi-wrench-adjustable-circle-fill"></i></span>
+                    <div>
+                        <strong>Roadside unit shortlisted</strong>
+                        <span>2.4 km proximity match</span>
+                    </div>
+                </div>
 
                 <div class="dispatch-panel">
                     <div class="dispatch-panel-head">
@@ -82,6 +102,12 @@
                             <span>Finding the closest available pro</span>
                         </div>
                         <i class="bi bi-chevron-right"></i>
+                    </div>
+
+                    <div class="dispatch-metric-row">
+                        <div><span>ETA</span><strong>18m</strong></div>
+                        <div><span>Signal</span><strong>GPS</strong></div>
+                        <div><span>Priority</span><strong>High</strong></div>
                     </div>
                 </div>
 
@@ -113,6 +139,13 @@
                 <div class="workflow-assurance">
                     <span><i class="bi bi-shield-check"></i> Protected location context</span>
                     <span><i class="bi bi-clock-history"></i> Time-aware prioritization</span>
+                </div>
+                <div class="workflow-ticker" aria-label="Live operating sequence">
+                    <span>Intake received</span>
+                    <i class="bi bi-arrow-right"></i>
+                    <span>Queue prioritized</span>
+                    <i class="bi bi-arrow-right"></i>
+                    <span>Mechanic dispatched</span>
                 </div>
             </div>
 
