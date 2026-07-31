@@ -106,6 +106,66 @@
         };
     }
 
+    function initMotionSystem() {
+        const selectors = [
+            ".confidence-grid > div",
+            ".workflow-showcase",
+            ".workflow-lane",
+            ".role-feature-card",
+            ".rescue-steps li",
+            ".rescue-cta-card",
+            ".dashboard-card",
+            ".dashboard-workflow-panel",
+            ".workflow-progress-step",
+            ".ops-command-grid > div",
+            ".job-card",
+            ".request-row",
+            ".auth-aside",
+            ".auth-card",
+            ".rescue-guidance-card",
+            ".rescue-form-card",
+            ".empty-state",
+        ];
+        const targets = Array.from(document.querySelectorAll(selectors.join(",")));
+        if (!targets.length) {
+            return;
+        }
+
+        document.documentElement.classList.add("motion-ready");
+        const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        targets.forEach((target, index) => {
+            target.classList.add("motion-reveal");
+            target.style.setProperty("--reveal-delay", `${(index % 8) * 70}ms`);
+        });
+
+        if (prefersReducedMotion || !("IntersectionObserver" in window)) {
+            targets.forEach((target) => target.classList.add("is-visible"));
+            return;
+        }
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (!entry.isIntersecting) {
+                        return;
+                    }
+                    entry.target.classList.add("is-visible");
+                    observer.unobserve(entry.target);
+                });
+            },
+            { threshold: 0.14, rootMargin: "0px 0px -8% 0px" }
+        );
+
+        targets.forEach((target) => observer.observe(target));
+    }
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initMotionSystem);
+    } else {
+        initMotionSystem();
+    }
+
     window.AutoRescue = {
         showAlert,
         submitForm,
