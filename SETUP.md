@@ -75,3 +75,7 @@ You can also use a full `DATABASE_URL` instead.
 .\.venv\Scripts\python.exe init_db.py
 .\.venv\Scripts\python.exe app.py
 ```
+
+## Workflow Documentation
+
+For the professional operating workflow, role handoffs, QA checklist, and demo script, see [WORKFLOW.md](WORKFLOW.md).

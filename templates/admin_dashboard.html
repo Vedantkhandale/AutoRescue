@@ -45,6 +45,33 @@
             </div>
         </div>
 
+        <div class="dashboard-workflow-panel admin-workflow-panel">
+            <div class="workflow-panel-head">
+                <div>
+                    <span class="eyebrow">Operating workflow</span>
+                    <h2>Network control loop</h2>
+                </div>
+                <span class="workflow-health-pill"><i class="bi bi-speedometer2"></i> {{ stats.pending }} open cases</span>
+            </div>
+            <div class="ops-command-grid">
+                <div>
+                    <span class="ops-command-label">Demand</span>
+                    <strong>{{ stats.pending }}</strong>
+                    <p>Open roadside rescues waiting for a mechanic.</p>
+                </div>
+                <div>
+                    <span class="ops-command-label">Supply</span>
+                    <strong>{{ stats.mechanics }}</strong>
+                    <p>Mechanic profiles available in the platform.</p>
+                </div>
+                <div>
+                    <span class="ops-command-label">Throughput</span>
+                    <strong>{{ stats.completed }}</strong>
+                    <p>Completed rescues proving the workflow.</p>
+                </div>
+            </div>
+        </div>
+
         <div class="row g-4 mt-1">
             <div class="col-lg-6">
                 <div class="dashboard-card table-card elevated-list-card">

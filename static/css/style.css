@@ -3053,3 +3053,306 @@ body {
     .rescue-form-card { padding: 1.35rem; border-radius: 1rem; }
     .page-heading h1 { font-size: 2.35rem; }
 }
+
+/* Professional workflow polish */
+.workflow-showcase-section {
+    padding-top: 3.8rem;
+    padding-bottom: 4.2rem;
+}
+
+.workflow-showcase {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: clamp(2rem, 5vw, 4.5rem);
+    align-items: center;
+    padding: clamp(1.4rem, 3.5vw, 2.4rem);
+    border: 1px solid rgba(184, 213, 235, 0.12);
+    border-radius: 1.35rem;
+    background:
+        linear-gradient(135deg, rgba(15, 32, 52, 0.92), rgba(8, 20, 35, 0.94)),
+        radial-gradient(circle at 90% 0, rgba(55, 216, 197, 0.16), transparent 20rem);
+    box-shadow: 0 1.4rem 3.6rem rgba(0, 0, 0, 0.2);
+}
+
+.workflow-showcase-copy h2 {
+    max-width: 13ch;
+    margin: 0.85rem 0 0;
+    color: #f6f9fc;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: clamp(2rem, 3.5vw, 3.25rem);
+    line-height: 1.08;
+}
+
+.workflow-showcase-copy p {
+    max-width: 43ch;
+    margin: 1rem 0 0;
+    color: #9fb2c6;
+    line-height: 1.75;
+}
+
+.workflow-assurance {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    margin-top: 1.5rem;
+}
+
+.workflow-assurance span,
+.workflow-health-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    border: 1px solid rgba(184, 213, 235, 0.13);
+    border-radius: 999px;
+    color: #d9e7f3;
+    background: rgba(255, 255, 255, 0.045);
+    font-size: 0.75rem;
+    font-weight: 800;
+}
+
+.workflow-assurance span {
+    padding: 0.58rem 0.78rem;
+}
+
+.workflow-assurance i,
+.workflow-health-pill i {
+    color: #5eead4;
+}
+
+.workflow-board {
+    display: grid;
+    gap: 0.82rem;
+}
+
+.workflow-lane {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 1rem;
+    align-items: center;
+    min-height: 6rem;
+    padding: 1rem 1.05rem;
+    border: 1px solid rgba(184, 213, 235, 0.1);
+    border-radius: 1rem;
+    background: rgba(255, 255, 255, 0.035);
+}
+
+.workflow-lane::before {
+    position: absolute;
+    top: 50%;
+    left: 2.15rem;
+    width: 1px;
+    height: calc(100% + 0.82rem);
+    background: rgba(255, 174, 114, 0.24);
+    content: "";
+    transform: translateY(50%);
+}
+
+.workflow-lane:last-child::before {
+    display: none;
+}
+
+.workflow-lane.active {
+    border-color: rgba(255, 174, 114, 0.26);
+    background: linear-gradient(135deg, rgba(255, 136, 71, 0.12), rgba(255, 255, 255, 0.035));
+}
+
+.workflow-lane-index {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    width: 2.25rem;
+    height: 2.25rem;
+    place-items: center;
+    border: 1px solid rgba(255, 174, 114, 0.26);
+    border-radius: 0.7rem;
+    color: #ffd08a;
+    background: rgba(8, 20, 35, 0.94);
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 0.7rem;
+    font-weight: 800;
+}
+
+.workflow-lane h3 {
+    margin: 0;
+    color: #f5f8fc;
+    font-size: 1rem;
+    font-weight: 800;
+}
+
+.workflow-lane p {
+    margin: 0.25rem 0 0;
+    color: #8fa4b9;
+    font-size: 0.8rem;
+    line-height: 1.5;
+}
+
+.workflow-lane > i {
+    color: #ffb878;
+    font-size: 1.15rem;
+}
+
+.dashboard-workflow-panel {
+    position: relative;
+    overflow: hidden;
+    margin: 1.4rem 0 1.6rem;
+    padding: clamp(1.1rem, 2.8vw, 1.6rem);
+    border: 1px solid rgba(184, 213, 235, 0.12);
+    border-radius: 1.2rem;
+    background:
+        linear-gradient(135deg, rgba(16, 34, 54, 0.92), rgba(7, 18, 31, 0.94)),
+        radial-gradient(circle at right top, rgba(255, 136, 71, 0.13), transparent 18rem);
+    box-shadow: 0 1.1rem 2.7rem rgba(0, 0, 0, 0.16);
+}
+
+.dashboard-workflow-panel::before {
+    position: absolute;
+    top: -6rem;
+    right: -4rem;
+    width: 13rem;
+    height: 13rem;
+    border: 1px solid rgba(255, 255, 255, 0.065);
+    border-radius: 50%;
+    content: "";
+}
+
+.workflow-panel-head {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.1rem;
+}
+
+.workflow-panel-head h2 {
+    margin: 0.45rem 0 0;
+    color: #f7fafc;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: clamp(1.35rem, 2.4vw, 1.9rem);
+    line-height: 1.1;
+}
+
+.workflow-health-pill {
+    flex: 0 0 auto;
+    padding: 0.56rem 0.75rem;
+}
+
+.workflow-progress-grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.75rem;
+}
+
+.workflow-progress-step,
+.ops-command-grid > div {
+    min-height: 8.1rem;
+    padding: 1rem;
+    border: 1px solid rgba(184, 213, 235, 0.1);
+    border-radius: 0.9rem;
+    background: rgba(255, 255, 255, 0.035);
+}
+
+.workflow-progress-step span,
+.ops-command-label {
+    display: inline-flex;
+    margin-bottom: 0.75rem;
+    color: #95a9bd;
+    font-size: 0.67rem;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.workflow-progress-step strong,
+.ops-command-grid strong {
+    display: block;
+    color: #f3f7fb;
+    font-size: 0.92rem;
+}
+
+.workflow-progress-step p,
+.ops-command-grid p {
+    margin: 0.35rem 0 0;
+    color: #8ca0b5;
+    font-size: 0.76rem;
+    line-height: 1.5;
+}
+
+.workflow-progress-step.is-active {
+    border-color: rgba(255, 174, 114, 0.28);
+    background: rgba(255, 136, 71, 0.08);
+}
+
+.workflow-progress-step.is-complete {
+    border-color: rgba(94, 234, 212, 0.22);
+    background: rgba(45, 212, 191, 0.07);
+}
+
+.workflow-progress-step.is-active span {
+    color: #ffd08a;
+}
+
+.workflow-progress-step.is-complete span {
+    color: #8df5e7;
+}
+
+.ops-command-grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.75rem;
+}
+
+.ops-command-grid strong {
+    color: #ffd08a;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    line-height: 1;
+}
+
+@media (max-width: 991px) {
+    .workflow-showcase {
+        grid-template-columns: 1fr;
+    }
+
+    .workflow-progress-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 767px) {
+    .workflow-showcase-section {
+        padding-top: 2.8rem;
+        padding-bottom: 3.4rem;
+    }
+
+    .workflow-showcase {
+        border-radius: 1rem;
+    }
+
+    .workflow-lane {
+        grid-template-columns: auto minmax(0, 1fr);
+    }
+
+    .workflow-lane > i {
+        display: none;
+    }
+
+    .workflow-panel-head {
+        flex-direction: column;
+    }
+
+    .workflow-health-pill {
+        width: fit-content;
+    }
+
+    .workflow-progress-grid,
+    .ops-command-grid {
+        grid-template-columns: 1fr;
+    }
+}

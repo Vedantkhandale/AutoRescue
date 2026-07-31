@@ -46,6 +46,38 @@
             </div>
         </div>
 
+        <div class="dashboard-workflow-panel">
+            <div class="workflow-panel-head">
+                <div>
+                    <span class="eyebrow">Service workflow</span>
+                    <h2>Your rescue flow</h2>
+                </div>
+                <span class="workflow-health-pill"><i class="bi bi-activity"></i> {% if stats.pending %}Action live{% elif stats.accepted %}Mechanic engaged{% else %}Standing by{% endif %}</span>
+            </div>
+            <div class="workflow-progress-grid">
+                <div class="workflow-progress-step {% if stats.total %}is-complete{% endif %}">
+                    <span>01</span>
+                    <strong>Request logged</strong>
+                    <p>Issue and pickup point captured.</p>
+                </div>
+                <div class="workflow-progress-step {% if stats.pending or stats.accepted or stats.completed %}is-active{% endif %}">
+                    <span>02</span>
+                    <strong>Matching help</strong>
+                    <p>Nearby mechanics can review your case.</p>
+                </div>
+                <div class="workflow-progress-step {% if stats.accepted or stats.completed %}is-complete{% endif %}">
+                    <span>03</span>
+                    <strong>Mechanic accepted</strong>
+                    <p>Your request has moved out of queue.</p>
+                </div>
+                <div class="workflow-progress-step {% if stats.completed %}is-complete{% endif %}">
+                    <span>04</span>
+                    <strong>Resolved</strong>
+                    <p>Completed rescues stay in history.</p>
+                </div>
+            </div>
+        </div>
+
         <div class="row g-4 mt-1">
             <div class="col-lg-4">
                 <div class="dashboard-card info-card action-panel">

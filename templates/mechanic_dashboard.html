@@ -46,6 +46,38 @@
             </div>
         </div>
 
+        <div class="dashboard-workflow-panel mechanic-workflow-panel">
+            <div class="workflow-panel-head">
+                <div>
+                    <span class="eyebrow">Dispatch rhythm</span>
+                    <h2>Professional job handling</h2>
+                </div>
+                <span class="workflow-health-pill"><i class="bi bi-broadcast"></i> {{ stats.pending }} waiting</span>
+            </div>
+            <div class="workflow-progress-grid">
+                <div class="workflow-progress-step is-active">
+                    <span>01</span>
+                    <strong>Scan queue</strong>
+                    <p>Review priority, distance, customer, and issue details.</p>
+                </div>
+                <div class="workflow-progress-step {% if requests %}is-active{% endif %}">
+                    <span>02</span>
+                    <strong>Claim fit</strong>
+                    <p>Accept jobs that match your route and capability.</p>
+                </div>
+                <div class="workflow-progress-step {% if stats.accepted %}is-complete{% endif %}">
+                    <span>03</span>
+                    <strong>Coordinate</strong>
+                    <p>Use customer contact and location context carefully.</p>
+                </div>
+                <div class="workflow-progress-step {% if stats.completed %}is-complete{% endif %}">
+                    <span>04</span>
+                    <strong>Close loop</strong>
+                    <p>Completed work strengthens network trust.</p>
+                </div>
+            </div>
+        </div>
+
         <div class="row g-4 mt-1">
             <div class="col-lg-4">
                 <div class="dashboard-card info-card action-panel">
