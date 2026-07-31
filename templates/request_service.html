@@ -82,20 +82,28 @@
                     </div>
 
                     <div class="rescue-map-wrap">
-                        <div id="serviceMap" class="map-shell" aria-label="Select your breakdown location on the map"></div>
-                        <div id="mapStatus" class="map-status"><i class="bi bi-geo-alt-fill"></i> Default location selected</div>
+                        <div class="map-toolbar" aria-hidden="true">
+                            <span><i class="bi bi-map"></i> Pickup map</span>
+                            <span class="map-toolbar-hint"><i class="bi bi-hand-index-thumb"></i> Tap to move pin</span>
+                        </div>
+                        <div id="serviceMap" class="map-shell" aria-label="Select your breakdown location on the map" tabindex="0"></div>
+                        <div class="map-actions">
+                            <button type="button" id="centerOnPin" class="map-action" title="Center map on pickup pin" aria-label="Center map on pickup pin"><i class="bi bi-crosshair"></i></button>
+                        </div>
+                        <div id="mapStatus" class="map-status" aria-live="polite"><i class="bi bi-geo-alt-fill"></i> Pickup pin ready</div>
                     </div>
 
-                    <div class="row g-3 location-fields">
-                        <div class="col-md-6">
-                            <label class="form-label" for="latitudeInput">Latitude</label>
-                            <input type="number" class="form-control form-control-lg" name="latitude" id="latitudeInput" step="0.0001" required>
+                    <div class="location-summary">
+                        <span class="location-summary-icon"><i class="bi bi-pin-map-fill"></i></span>
+                        <div>
+                            <strong>Pickup point selected</strong>
+                            <span id="locationSummary">We will use this pin to coordinate your rescue.</span>
                         </div>
-                        <div class="col-md-6">
-                            <label class="form-label" for="longitudeInput">Longitude</label>
-                            <input type="number" class="form-control form-control-lg" name="longitude" id="longitudeInput" step="0.0001" required>
-                        </div>
+                        <i class="bi bi-check-circle-fill location-summary-check"></i>
                     </div>
+
+                    <input type="hidden" name="latitude" id="latitudeInput" required>
+                    <input type="hidden" name="longitude" id="longitudeInput" required>
 
                     <button type="submit" id="submitRescueRequest" class="btn btn-rescue-primary btn-lg w-100 request-submit-button"><i class="bi bi-send-fill"></i> Find me roadside help</button>
                     <p class="form-assurance"><i class="bi bi-shield-lock"></i> Your location is used only to coordinate this request.</p>
@@ -115,7 +123,19 @@
     const longitudeInput = document.getElementById('longitudeInput');
     const mapStatus = document.getElementById('mapStatus');
     const submitButton = document.getElementById('submitRescueRequest');
+    const locationSummary = document.getElementById('locationSummary');
+    const centerOnPinButton = document.getElementById('centerOnPin');
+    const captureLocationButton = document.getElementById('captureLocation');
     let marker = null;
+    let selectedLocation = defaultLocation;
+
+    const markerIcon = L.divIcon({
+        className: 'autorescue-map-marker',
+        html: '<span class="map-pin-marker"><i class="bi bi-car-front-fill"></i></span>',
+        iconSize: [42, 52],
+        iconAnchor: [21, 52],
+        popupAnchor: [0, -48]
+    });
 
     L.control.zoom({ position: 'bottomright' }).addTo(map);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -123,35 +143,54 @@
         attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
-    function setLocation(lat, lng, label = 'Location pinned for rescue') {
+    function setLocation(lat, lng, label = 'Location pinned for rescue', recenter = true) {
+        selectedLocation = [Number(lat), Number(lng)];
         latitudeInput.value = Number(lat).toFixed(4);
         longitudeInput.value = Number(lng).toFixed(4);
 
         if (marker) {
             marker.setLatLng([lat, lng]);
         } else {
-            marker = L.marker([lat, lng]).addTo(map);
+            marker = L.marker([lat, lng], { icon: markerIcon }).addTo(map);
+            marker.bindTooltip('Your pickup point', {
+                direction: 'top',
+                offset: [0, -42],
+                className: 'map-tooltip'
+            });
         }
 
         mapStatus.innerHTML = `<i class="bi bi-geo-alt-fill"></i> ${label}`;
-        map.setView([lat, lng], 14);
+        locationSummary.textContent = `Pinned at ${Number(lat).toFixed(4)}, ${Number(lng).toFixed(4)}`;
+        if (recenter) {
+            map.setView([lat, lng], 14, { animate: true });
+        }
     }
 
     setLocation(defaultLocation[0], defaultLocation[1]);
 
     map.on('click', (event) => {
-        setLocation(event.latlng.lat, event.latlng.lng, 'Pickup point pinned on the map');
+        setLocation(event.latlng.lat, event.latlng.lng, 'Pickup point pinned on the map', false);
     });
 
-    document.getElementById('captureLocation').addEventListener('click', async () => {
+    centerOnPinButton.addEventListener('click', () => {
+        map.setView(selectedLocation, Math.max(map.getZoom(), 14), { animate: true });
+        AutoRescue.toast('Map centered on your pickup pin');
+    });
+
+    captureLocationButton.addEventListener('click', async () => {
+        const restoreButton = AutoRescue.setButtonLoading(captureLocationButton, 'Locating...');
         try {
             const coords = await AutoRescue.getCurrentLocation();
             setLocation(coords.latitude, coords.longitude, 'Your current location is ready');
-            AutoRescue.toast('Location captured');
+            AutoRescue.toast('Pickup location captured');
         } catch (error) {
             AutoRescue.toast(error.message, 'danger');
+        } finally {
+            restoreButton();
         }
     });
+
+    window.setTimeout(() => map.invalidateSize(), 150);
 
     document.getElementById('serviceForm').addEventListener('submit', async (event) => {
         event.preventDefault();
