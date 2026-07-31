@@ -3793,3 +3793,374 @@ body::before {
         animation: none !important;
     }
 }
+
+/* Animated experience layer */
+.motion-ready .motion-reveal {
+    opacity: 0;
+    transform: translateY(1.3rem) scale(0.985);
+    transition:
+        opacity 0.72s ease,
+        transform 0.72s cubic-bezier(0.16, 1, 0.3, 1),
+        border-color 0.24s ease,
+        background 0.24s ease,
+        box-shadow 0.24s ease;
+    transition-delay: var(--reveal-delay, 0ms);
+}
+
+.motion-ready .motion-reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+.rescue-hero-copy {
+    animation: hero-copy-rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.rescue-hero-visual {
+    animation: hero-visual-rise 1s 0.08s cubic-bezier(0.16, 1, 0.3, 1) both, hero-visual-float 7s 1.2s ease-in-out infinite;
+}
+
+.availability-badge {
+    animation: badge-settle 0.75s 0.16s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.availability-dot,
+.mini-signal {
+    animation: live-dot-pulse 1.8s ease-in-out infinite;
+}
+
+.map-grid {
+    animation: map-drift 18s linear infinite;
+}
+
+.route-main,
+.route-alt {
+    animation: route-dash 7s linear infinite;
+}
+
+.pin-customer {
+    animation: pin-drop 0.8s 0.35s cubic-bezier(0.16, 1, 0.3, 1) both, pin-breathe 2.8s 1.4s ease-in-out infinite;
+}
+
+.pin-mechanic {
+    animation: pin-drop 0.8s 0.55s cubic-bezier(0.16, 1, 0.3, 1) both, pin-breathe 3s 1.55s ease-in-out infinite;
+}
+
+.dispatch-panel {
+    animation: panel-lift 0.85s 0.42s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.rescue-unit-card {
+    animation: panel-lift 0.8s 0.62s cubic-bezier(0.16, 1, 0.3, 1) both, unit-card-float 4.8s 1.6s ease-in-out infinite;
+}
+
+.floating-chip {
+    animation: chip-float 4.6s ease-in-out infinite;
+}
+
+.chip-signal {
+    animation-delay: 0.85s;
+}
+
+.route-line {
+    animation: route-line-flow 3.2s linear infinite;
+}
+
+.dispatch-status-card .status-icon {
+    animation: status-glow 2.5s ease-in-out infinite;
+}
+
+.workflow-lane.active .workflow-lane-index,
+.workflow-progress-step.is-active span,
+.workflow-progress-step.is-complete span {
+    animation: number-glow 2.4s ease-in-out infinite;
+}
+
+.workflow-ticker span {
+    animation: ticker-pulse 4.2s ease-in-out infinite;
+}
+
+.workflow-ticker span:nth-of-type(2) {
+    animation-delay: 0.45s;
+}
+
+.workflow-ticker span:nth-of-type(3) {
+    animation-delay: 0.9s;
+}
+
+.dashboard-workflow-panel,
+.workflow-showcase,
+.rescue-cta-card {
+    isolation: isolate;
+}
+
+.dashboard-workflow-panel::after,
+.workflow-showcase::after,
+.rescue-cta-card::after {
+    mix-blend-mode: screen;
+}
+
+.dashboard-workflow-panel::after,
+.workflow-showcase::after {
+    background:
+        linear-gradient(115deg, transparent 0%, rgba(255, 208, 138, 0.07) 42%, rgba(94, 234, 212, 0.08) 50%, transparent 62%),
+        linear-gradient(135deg, rgba(255, 255, 255, 0.06), transparent 35%);
+    background-size: 220% 100%, 100% 100%;
+    animation: panel-sheen 8s ease-in-out infinite;
+}
+
+.dashboard-page .stat-card:hover,
+.dashboard-page .job-card:hover,
+.role-feature-card:hover,
+.workflow-progress-step:hover,
+.ops-command-grid > div:hover {
+    transform: translateY(-0.42rem) scale(1.01);
+}
+
+.hero-command-strip div:hover strong,
+.dispatch-metric-row div:hover strong,
+.ops-command-grid > div:hover strong,
+.stat-card:hover strong {
+    color: #fff4df;
+    text-shadow: 0 0 1rem rgba(255, 208, 138, 0.28);
+}
+
+.btn i {
+    transition: transform 0.22s ease;
+}
+
+.btn:hover i {
+    transform: translateX(0.12rem) scale(1.05);
+}
+
+.btn-location:hover i,
+.btn-ghost:hover i,
+.btn-soft:hover i {
+    transform: scale(1.08);
+}
+
+.toast-shell {
+    animation: toast-slide-up 0.34s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes hero-copy-rise {
+    from {
+        opacity: 0;
+        transform: translateY(1.4rem);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes hero-visual-rise {
+    from {
+        opacity: 0;
+        transform: translateY(1.8rem) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes hero-visual-float {
+    0%, 100% {
+        translate: 0 0;
+    }
+    50% {
+        translate: 0 -0.42rem;
+    }
+}
+
+@keyframes badge-settle {
+    from {
+        opacity: 0;
+        transform: translateY(-0.55rem) scale(0.96);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes live-dot-pulse {
+    0%, 100% {
+        box-shadow: 0 0 0 0.18rem rgba(74, 222, 128, 0.12), 0 0 0.75rem rgba(74, 222, 128, 0.5);
+        transform: scale(1);
+    }
+    50% {
+        box-shadow: 0 0 0 0.34rem rgba(74, 222, 128, 0.05), 0 0 1.1rem rgba(74, 222, 128, 0.72);
+        transform: scale(1.16);
+    }
+}
+
+@keyframes map-drift {
+    from {
+        background-position: 0 0, 0 0, 0 0, 0 0;
+    }
+    to {
+        background-position: 2.3rem 2.3rem, 2.3rem 2.3rem, 12rem 12rem, -15rem 15rem;
+    }
+}
+
+@keyframes route-dash {
+    from {
+        border-color: rgba(251, 146, 60, 0.78);
+    }
+    50% {
+        border-color: rgba(94, 234, 212, 0.45);
+    }
+    to {
+        border-color: rgba(251, 146, 60, 0.78);
+    }
+}
+
+@keyframes pin-drop {
+    from {
+        opacity: 0;
+        scale: 0.78;
+        translate: 0 -1rem;
+    }
+    to {
+        opacity: 1;
+        scale: 1;
+        translate: 0 0;
+    }
+}
+
+@keyframes pin-breathe {
+    0%, 100% {
+        box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.26), 0 0 0 0 rgba(255, 208, 138, 0.18);
+    }
+    50% {
+        box-shadow: 0 0.95rem 1.9rem rgba(0, 0, 0, 0.3), 0 0 0 0.5rem rgba(255, 208, 138, 0.05);
+    }
+}
+
+@keyframes panel-lift {
+    from {
+        opacity: 0;
+        transform: translateY(1rem) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes unit-card-float {
+    0%, 100% {
+        translate: 0 0;
+    }
+    50% {
+        translate: 0 -0.32rem;
+    }
+}
+
+@keyframes chip-float {
+    0%, 100% {
+        translate: 0 0;
+    }
+    50% {
+        translate: 0 -0.45rem;
+    }
+}
+
+@keyframes route-line-flow {
+    from {
+        background-position: 0 0;
+    }
+    to {
+        background-position: 1.8rem 0;
+    }
+}
+
+@keyframes status-glow {
+    0%, 100% {
+        box-shadow: 0 0 0 rgba(94, 234, 212, 0);
+    }
+    50% {
+        box-shadow: 0 0 1.2rem rgba(94, 234, 212, 0.24);
+    }
+}
+
+@keyframes number-glow {
+    0%, 100% {
+        text-shadow: none;
+    }
+    50% {
+        text-shadow: 0 0 1rem rgba(255, 208, 138, 0.38);
+    }
+}
+
+@keyframes ticker-pulse {
+    0%, 100% {
+        border-color: rgba(184, 213, 235, 0.11);
+        background: rgba(255, 255, 255, 0.035);
+    }
+    50% {
+        border-color: rgba(255, 208, 138, 0.23);
+        background: rgba(255, 136, 71, 0.075);
+    }
+}
+
+@keyframes panel-sheen {
+    0%, 24% {
+        background-position: -120% 0, 0 0;
+        opacity: 0;
+    }
+    38% {
+        opacity: 0.82;
+    }
+    62%, 100% {
+        background-position: 160% 0, 0 0;
+        opacity: 0;
+    }
+}
+
+@keyframes toast-slide-up {
+    from {
+        opacity: 0;
+        transform: translateY(0.65rem) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@media (max-width: 767px) {
+    .motion-ready .motion-reveal {
+        transform: translateY(0.85rem);
+    }
+
+    .rescue-hero-visual {
+        animation-name: hero-visual-rise;
+    }
+
+    .floating-chip {
+        animation-duration: 5.8s;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    .motion-ready .motion-reveal {
+        opacity: 1 !important;
+        transform: none !important;
+    }
+}
