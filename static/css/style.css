@@ -678,6 +678,43 @@ html {
     border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
+/* Map pin visual polish */
+.autorescue-map-marker .map-pin-marker{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:46px;
+    height:46px;
+    border-radius:50%;
+    background: linear-gradient(180deg, var(--accent), var(--accent-strong));
+    color:#231104;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.35);
+    transform: translateY(-6px);
+    transition: transform 0.28s cubic-bezier(.22,.9,.28,1), box-shadow 0.28s ease;
+}
+.autorescue-map-marker .map-pin-marker::after{
+    content: '';
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    left: 50%;
+    bottom: -6px;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.12);
+    border-radius: 50%;
+    filter: blur(2px);
+}
+.autorescue-map-marker.pulsing .map-pin-marker{
+    animation: pin-bounce 1.6s infinite;
+}
+
+@keyframes pin-bounce {
+    0% { transform: translateY(-6px) scale(1); }
+    40% { transform: translateY(-14px) scale(1.03); }
+    70% { transform: translateY(-8px) scale(0.99); }
+    100% { transform: translateY(-6px) scale(1); }
+}
+
 .table-card .table-responsive {
     margin-top: 1rem;
 }
@@ -758,6 +795,9 @@ html {
     background: rgba(7, 17, 31, 0.94);
     border: 1px solid rgba(255, 255, 255, 0.09);
     box-shadow: var(--shadow-lg);
+    opacity: 0;
+    transform: translateY(10px) scale(0.995);
+    transition: opacity 260ms cubic-bezier(.2,.9,.3,1), transform 260ms cubic-bezier(.2,.9,.3,1);
 }
 
 .toast-shell.success {
@@ -766,6 +806,28 @@ html {
 
 .toast-shell.danger {
     border-color: rgba(239, 68, 68, 0.35);
+}
+
+.toast-shell.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+.location-summary {
+    display:flex;
+    align-items:center;
+    gap:0.9rem;
+}
+
+.location-summary strong{
+    display:block;
+    font-size:1.02rem;
+}
+
+.location-summary #locationSummary{
+    display:block;
+    color:var(--muted);
+    font-size:0.95rem;
 }
 
 code {

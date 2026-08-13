@@ -86,9 +86,20 @@
         shell.textContent = message;
         document.body.appendChild(shell);
 
+        // animate in
+        // force reflow then add visible class
+        // small delay to ensure transition runs
+        // eslint-disable-next-line no-unused-expressions
+        shell.offsetHeight;
+        shell.classList.add('visible');
+
+        // hide after timeout with fade-out transition
+        const visibleFor = 2400;
         window.setTimeout(() => {
-            shell.remove();
-        }, 2400);
+            shell.classList.remove('visible');
+            // remove after transition
+            window.setTimeout(() => shell.remove(), 320);
+        }, visibleFor);
     }
 
     function setButtonLoading(button, label) {
