@@ -197,8 +197,7 @@ def serialize_request(service_request, mechanic=None, include_customer=False):
             service_request.latitude,
             service_request.longitude,
         )
-        if km is not None:
-            distance_label = f"{km} km away"
+      
 
     return {
         "id": service_request.id,
