@@ -162,11 +162,22 @@
         mapStatus.innerHTML = `<i class="bi bi-geo-alt-fill"></i> ${label}`;
         locationSummary.textContent = `Pinned at ${Number(lat).toFixed(4)}, ${Number(lng).toFixed(4)}`;
         if (recenter) {
-            map.setView([lat, lng], 14, { animate: true });
+            map.flyTo([lat, lng], 14, { animate: true, duration: 0.9 });
         }
     }
 
+    // Try to capture user location automatically (graceful, non-blocking)
     setLocation(defaultLocation[0], defaultLocation[1]);
+    (async function tryAutoCapture() {
+        try {
+            const coords = await AutoRescue.getCurrentLocation();
+            setLocation(coords.latitude, coords.longitude, 'Using your current location', true);
+            AutoRescue.toast('Using device location');
+        } catch (err) {
+            // silent fallback — user can still tap 'Use my location'
+            console.debug('Location auto-capture failed:', err && err.message);
+        }
+    })();
 
     map.on('click', (event) => {
         setLocation(event.latlng.lat, event.latlng.lng, 'Pickup point pinned on the map', false);
@@ -181,7 +192,7 @@
         const restoreButton = AutoRescue.setButtonLoading(captureLocationButton, 'Locating...');
         try {
             const coords = await AutoRescue.getCurrentLocation();
-            setLocation(coords.latitude, coords.longitude, 'Your current location is ready');
+            setLocation(coords.latitude, coords.longitude, 'Your current location is ready', true);
             AutoRescue.toast('Pickup location captured');
         } catch (error) {
             AutoRescue.toast(error.message, 'danger');
@@ -190,10 +201,32 @@
         }
     });
 
+    // Ensure the form has a location before submitting; if not, attempt a last-second capture
+    async function ensureLocationAvailable() {
+        if (latitudeInput.value && longitudeInput.value) {
+            return true;
+        }
+
+        try {
+            const coords = await AutoRescue.getCurrentLocation();
+            setLocation(coords.latitude, coords.longitude, 'Your current location is ready', true);
+            return true;
+        } catch (err) {
+            AutoRescue.toast('Please allow location access or pin your pickup on the map', 'danger');
+            return false;
+        }
+    }
+
     window.setTimeout(() => map.invalidateSize(), 150);
 
     document.getElementById('serviceForm').addEventListener('submit', async (event) => {
         event.preventDefault();
+        // make sure we have a lat/lng—try to capture if missing
+        const ok = await ensureLocationAvailable();
+        if (!ok) {
+            return;
+        }
+
         const restoreButton = AutoRescue.setButtonLoading(submitButton, 'Sending request...');
 
         try {
